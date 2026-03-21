@@ -6,42 +6,43 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [Header("References")]
-    
+    public Animator animator;
+    [SerializeField] Transform model; // visual mesh
+    [SerializeField] Transform cameraTransform;
 
     [Header("Movement")]
     [SerializeField] float walkSpeed = 6f;
     [SerializeField] float sprintSpeed = 9f;
     [SerializeField] float acceleration = 14f;
+    [SerializeField] float rotationSpeed = 10f;
 
     [Header("Jumping")]
     [SerializeField] float jumpHeight = 1.6f;
     [SerializeField] float gravity = -20f;
 
-    [Header("Grounding")]
-    [SerializeField] LayerMask groundMask;
-
     [Header("Footstep Particles")]
-    [SerializeField] private GameObject footstepParticlePrefab;
-    [SerializeField] private Transform footPoint;
-    [SerializeField] private float spawnRate = 0.15f;
+    [SerializeField] GameObject footstepParticlePrefab;
+    [SerializeField] Transform footPoint;
+    [SerializeField] float spawnRate = 0.15f;
 
-    private float nextSpawnTime;
     CharacterController controller;
 
     Vector2 moveInput;
-
-
     Vector3 velocity;
     float verticalVelocity;
 
     bool isSprinting;
     bool isGrounded;
-    private bool isFiring;
 
+    float nextSpawnTime;
 
     void Awake()
     {
         controller = GetComponent<CharacterController>();
+
+        // fallback if not assigned
+        if (cameraTransform == null)
+            cameraTransform = Camera.main.transform;
     }
 
     void Update()
@@ -49,7 +50,96 @@ public class PlayerController : MonoBehaviour
         GroundCheck();
         HandleMovement();
         ApplyGravity();
+        HandleAnimations();
+        HandleFootsteps();
+    }
 
+    // ---------------- MOVEMENT ----------------
+
+    void HandleMovement()
+    {
+        // Camera-relative movement
+        Vector3 camForward = cameraTransform.forward;
+        Vector3 camRight = cameraTransform.right;
+
+        camForward.y = 0;
+        camRight.y = 0;
+
+        camForward.Normalize();
+        camRight.Normalize();
+
+        Vector3 moveDir = camForward * moveInput.y + camRight * moveInput.x;
+
+        float speed = isSprinting ? sprintSpeed : walkSpeed;
+
+        Vector3 targetVelocity = moveDir * speed;
+
+        velocity = Vector3.Lerp(
+            velocity,
+            targetVelocity,
+            acceleration * Time.deltaTime
+        );
+
+        controller.Move(velocity * Time.deltaTime);
+
+        // Smooth model rotation
+        if (moveDir.magnitude > 0.1f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(moveDir);
+
+            model.rotation = Quaternion.Slerp(
+                model.rotation,
+                targetRotation,
+                rotationSpeed * Time.deltaTime
+            );
+        }
+    }
+
+    // ---------------- GRAVITY ----------------
+
+    void ApplyGravity()
+    {
+        verticalVelocity += gravity * Time.deltaTime;
+
+        Vector3 gravityMove = Vector3.up * verticalVelocity;
+        controller.Move(gravityMove * Time.deltaTime);
+    }
+
+    void GroundCheck()
+    {
+        isGrounded = controller.isGrounded;
+
+        if (isGrounded && verticalVelocity < 0)
+        {
+            verticalVelocity = -2f;
+        }
+    }
+
+    // ---------------- JUMP ----------------
+
+    void Jump()
+    {
+        if (!isGrounded) return;
+
+        verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        animator.SetTrigger("jump");
+    }
+
+    // ---------------- ANIMATIONS ----------------
+
+    void HandleAnimations()
+    {
+        float speedPercent = velocity.magnitude / sprintSpeed;
+
+        animator.SetFloat("speed", speedPercent, 0.1f, Time.deltaTime);
+        animator.SetBool("isGrounded", isGrounded);
+        animator.SetFloat("yVelocity", verticalVelocity);
+    }
+
+    // ---------------- FOOTSTEPS ----------------
+
+    void HandleFootsteps()
+    {
         if (isGrounded && moveInput.magnitude > 0.1f)
         {
             if (Time.time >= nextSpawnTime)
@@ -60,64 +150,18 @@ public class PlayerController : MonoBehaviour
                     Quaternion.identity
                 );
 
-                Destroy(particle, 0.5f); // cleanup after 2 seconds
-
+                Destroy(particle, 0.5f);
                 nextSpawnTime = Time.time + spawnRate;
             }
         }
     }
 
-    void GroundCheck()
-    {
-        isGrounded = controller.isGrounded;
-
-        if (isGrounded && verticalVelocity < 0)
-            verticalVelocity = -2f;
-    }
-
-    void HandleMovement()
-    {
-        Vector3 move =
-            transform.right * moveInput.x +
-            transform.forward * moveInput.y;
-
-        float speed = isSprinting ? sprintSpeed : walkSpeed;
-
-        Vector3 targetVelocity = move * speed;
-
-        velocity = Vector3.Lerp(
-            velocity,
-            targetVelocity,
-            acceleration * Time.deltaTime
-        );
-
-        controller.Move(velocity * Time.deltaTime);
-    }
-
-    void ApplyGravity()
-    {
-        verticalVelocity += gravity * Time.deltaTime;
-
-        Vector3 gravityMove = Vector3.up * verticalVelocity;
-        controller.Move(gravityMove * Time.deltaTime);
-    }
-
-    
-
-    void Jump()
-    {
-        Debug.Log(isGrounded);
-        if (!isGrounded) return;
-        Debug.Log("jump");
-        verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
-    }
+    // ---------------- INPUT ----------------
 
     void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
     }
-
-
 
     void OnSprint(InputValue value)
     {
@@ -129,5 +173,4 @@ public class PlayerController : MonoBehaviour
         if (value.isPressed)
             Jump();
     }
-    
 }

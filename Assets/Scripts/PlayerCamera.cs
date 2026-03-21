@@ -27,17 +27,22 @@ public class PlayerCamera : MonoBehaviour
         HandleLook();
     }
 
+    float yaw; // horizontal rotation
+
     void HandleLook()
     {
         float mouseX = lookInput.x * mouseSensitivity;
         float mouseY = lookInput.y * mouseSensitivity;
 
-        transform.Rotate(Vector3.up * mouseX);
+        // Horizontal rotation (orbit around player)
+        yaw += mouseX;
 
+        // Vertical rotation (up/down)
         cameraXRotation -= mouseY;
         cameraXRotation = Mathf.Clamp(cameraXRotation, -verticalClamp, verticalClamp);
 
-        cameraPivot.localRotation = Quaternion.Euler(cameraXRotation, 0, 0);
+        // Apply rotations
+        cameraPivot.localRotation = Quaternion.Euler(cameraXRotation, yaw, 0);
     }
 
     void OnLook(InputValue value)
