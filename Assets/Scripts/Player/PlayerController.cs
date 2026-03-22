@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     public Animator animator;
     [SerializeField] Transform model; // visual mesh
     [SerializeField] Transform cameraTransform;
+    public FarmInteraction farmInteraction;
 
     [Header("Movement")]
     [SerializeField] float walkSpeed = 6f;
@@ -43,6 +44,8 @@ public class PlayerController : MonoBehaviour
         // fallback if not assigned
         if (cameraTransform == null)
             cameraTransform = Camera.main.transform;
+        if (farmInteraction == null)
+            farmInteraction = GetComponent<FarmInteraction>();
     }
 
     void Update()
@@ -172,5 +175,11 @@ public class PlayerController : MonoBehaviour
     {
         if (value.isPressed)
             Jump();
+    }
+
+    void OnAttack(InputValue value)
+    {
+        if (value.isPressed)
+            farmInteraction.Interact();
     }
 }
