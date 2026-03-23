@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform model; // visual mesh
     [SerializeField] Transform cameraTransform;
     public FarmInteraction farmInteraction;
+    [SerializeField] ToolManager toolManager;
 
     [Header("Movement")]
     [SerializeField] float walkSpeed = 6f;
@@ -177,9 +178,9 @@ public class PlayerController : MonoBehaviour
             Jump();
     }
 
-    void OnAttack(InputValue value)
+    void OnUseTool(InputValue value)
     {
         if (value.isPressed)
-            farmInteraction.Interact();
+            toolManager.OnUse();
     }
 }

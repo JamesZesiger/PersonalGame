@@ -17,6 +17,7 @@ public class FarmTile
 {
     public bool isTilled = false;
     public GameObject visualObject; // The instantiated prefab
+    public int lastMask = -1;
 }
 
 public class FarmChunk
@@ -34,6 +35,7 @@ public class FarmGrid : MonoBehaviour
     public GameObject Tunnel;
     public GameObject Corner;
     public GameObject InnerCorner;
+    public GameObject L;
     public GameObject T;
     public GameObject Flat;
     public GameObject TranstionMid;
@@ -41,6 +43,9 @@ public class FarmGrid : MonoBehaviour
     public GameObject Edge;
     public GameObject TransitionL;
     public GameObject TransitionR;
+    public GameObject TransitionTwo;
+    public GameObject SquareConnection;
+
     public int x_rotation = -90;
     [Header("Grid Settings")]
     public int width = 50;
@@ -106,49 +111,16 @@ public class FarmGrid : MonoBehaviour
 
         tile.isTilled = true;
 
-        UpdateTileVisual(x, z);
-        UpdateNeighborsPropagated(x, z);
+        UpdateTileAndNeighbors(x, z);
     }
 
-    void UpdateNeighborsPropagated(int x, int z)
+    void UpdateTileAndNeighbors(int x, int z)
     {
-        Queue<Vector2Int> queue = new Queue<Vector2Int>();
-        HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
-
-        queue.Enqueue(new Vector2Int(x, z));
-        visited.Add(new Vector2Int(x, z));
-
-        while(queue.Count > 0)
+        for (int dx = -1; dx <= 1; dx++)
         {
-            Vector2Int pos = queue.Dequeue();
-            FarmTile tile = GetTile(pos.x, pos.y);
-            if(tile == null || !tile.isTilled) continue;
-
-            TileVisual oldVisual = tile.visualObject != null ? 
-                new TileVisual(tile.visualObject, Quaternion.identity) : 
-                new TileVisual(null, Quaternion.identity);
-
-            UpdateTileVisual(pos.x, pos.y);
-
-            // If the visual changed, add neighbors to queue
-            if(tile.visualObject != oldVisual.prefab)
+            for (int dz = -1; dz <= 1; dz++)
             {
-                Vector2Int[] neighbors = new Vector2Int[]
-                {
-                    new Vector2Int(pos.x+1, pos.y),
-                    new Vector2Int(pos.x-1, pos.y),
-                    new Vector2Int(pos.x, pos.y+1),
-                    new Vector2Int(pos.x, pos.y-1)
-                };
-
-                foreach(var n in neighbors)
-                {
-                    if(!visited.Contains(n))
-                    {
-                        queue.Enqueue(n);
-                        visited.Add(n);
-                    }
-                }
+                UpdateTileVisual(x + dx, z + dz);
             }
         }
     }
@@ -193,25 +165,39 @@ public class FarmGrid : MonoBehaviour
     void UpdateTileVisual(int x, int z)
     {
         FarmTile tile = GetTile(x, z);
-        if (tile == null || !tile.isTilled) return;
+        if (tile == null) return;
+
+        int newMask = tile.isTilled ? GetBitmask(x, z) : -1;
+
+
+        if (tile.lastMask == newMask) return;
+
+        tile.lastMask = newMask;
+
+        // Remove old object
+        if (tile.visualObject != null)
+        {
+            Destroy(tile.visualObject);
+            tile.visualObject = null;
+        }
+
+        // If not tilled, stop here
+        if (!tile.isTilled) return;
 
         TileVisual visual = GetTileVisual(x, z);
 
-        // Destroy old object if exists
-        if (tile.visualObject != null)
-            Destroy(tile.visualObject);
-
-        // Instantiate new prefab if option is enabled
         if (instantiateObjects && visual.prefab != null)
         {
             Vector3 pos = GridToWorld(x, z);
-            pos.y-=0.01f;
-            tile.visualObject = Instantiate(visual.prefab, pos, visual.rotation, chunkParent);
-            Debug.Log($"intantiated:{visual.prefab}");
-        }
+            pos.y -= 0.01f;
 
-        // Always update chunk mesh
-        UpdateChunkAtTile(x, z);
+            tile.visualObject = Instantiate(
+                visual.prefab,
+                pos,
+                visual.rotation,
+                chunkParent
+            );
+        }
     }
 
     // ----------------------------
@@ -270,10 +256,10 @@ public class FarmGrid : MonoBehaviour
         // INNER CORNERS
         // These occur when diagonal is missing but both adjacent cardinals exist
         // ==========================
-        tileLookup[1 | 4 | 8 | 16 | 32 | 64 | 128] = new TileVisual(InnerCorner, Quaternion.Euler(x_rotation, 90, 0));   // top-right missing diag
-        tileLookup[1 | 2 | 4 | 16 | 32 | 64 | 128] = new TileVisual(InnerCorner, Quaternion.Euler(x_rotation, 180, 0));        // right-bottom
-        tileLookup[1 | 2 | 4 | 8 | 16 | 64 | 128] = new TileVisual(InnerCorner, Quaternion.Euler(x_rotation, -90, 0)); // bottom-left
-        tileLookup[1 | 2 | 4 | 8 | 16 | 32 | 64 ] = new TileVisual(InnerCorner, Quaternion.Euler(x_rotation, 0, 0)); // left-top
+        tileLookup[1 | 4 | 8 | 16 | 32 | 64 | 128] = new TileVisual(InnerCorner, Quaternion.Euler(x_rotation, -90, 0));   // top-right missing diag
+        tileLookup[1 | 2 | 4 | 16 | 32 | 64 | 128] = new TileVisual(InnerCorner, Quaternion.Euler(x_rotation, 0, 0));        // right-bottom
+        tileLookup[1 | 2 | 4 | 8 | 16 | 64 | 128] = new TileVisual(InnerCorner, Quaternion.Euler(x_rotation, 90, 0)); // bottom-left
+        tileLookup[1 | 2 | 4 | 8 | 16 | 32 | 64 ] = new TileVisual(InnerCorner, Quaternion.Euler(x_rotation, 180, 0)); // left-top
 
         // ==========================
         // flat 
@@ -283,10 +269,10 @@ public class FarmGrid : MonoBehaviour
         // ==========================
         // END CAPS (2 neighbors diagonally, like a T->flat transition)
         // ==========================
-        tileLookup[1 | 128] = new TileVisual(TranstionMid, Quaternion.Euler(x_rotation, 180, 0));  // top-left end
-        tileLookup[1 | 2] = new TileVisual(TranstionMid, Quaternion.Euler(x_rotation, 0, 0));            // top-right end
-        tileLookup[16 | 32] = new TileVisual(TranstionMid, Quaternion.Euler(x_rotation, 0, 0));          // bottom-left
-        tileLookup[16 | 8] = new TileVisual(TranstionMid, Quaternion.Euler(x_rotation, -90, 0));    // bottom-right
+        tileLookup[1 | 2 | 4 | 16 | 64 | 128] = new TileVisual(TranstionMid, Quaternion.Euler(x_rotation, 180, 0));  // top-left end
+        tileLookup[1 | 4 | 16 | 32 | 64 | 128] = new TileVisual(TranstionMid, Quaternion.Euler(x_rotation, 90, 0));            // top-right end
+        tileLookup[ 4 | 8 | 16 | 32 | 64 | 1] = new TileVisual(TranstionMid, Quaternion.Euler(x_rotation, 0, 0));          // bottom-left
+        tileLookup[1 | 2 | 4 | 16 | 8 | 64] = new TileVisual(TranstionMid, Quaternion.Euler(x_rotation, -90, 0));    // bottom-right
 
         // ==========================
         // edges
@@ -301,15 +287,34 @@ public class FarmGrid : MonoBehaviour
                 // 128  1  2
                 // 64   X  4
                 // 32  16  8
-        tileLookup[1 | 128 | 64 | 16 ] = new TileVisual(TransitionR, Quaternion.Euler(x_rotation, -90, 0));
-        tileLookup[1 | 2 | 4 | 16 ] = new TileVisual(TransitionL, Quaternion.Euler(x_rotation, -90, 0));
-        tileLookup[16 | 8 | 4 | 1 ] = new TileVisual(TransitionR, Quaternion.Euler(x_rotation, 90, 0));
-        tileLookup[16 | 32 | 64 | 1 ] = new TileVisual(TransitionL, Quaternion.Euler(x_rotation, 90, 0));
+        tileLookup[1 | 128 | 64 | 16 ] = new TileVisual(TransitionR, Quaternion.Euler(x_rotation, 180, 0));
+        tileLookup[1 | 2 | 4 | 16 ] = new TileVisual(TransitionL, Quaternion.Euler(x_rotation, 180, 0));
+        tileLookup[16 | 8 | 4 | 1 ] = new TileVisual(TransitionR, Quaternion.Euler(x_rotation, 0, 0));
+        tileLookup[16 | 32 | 64 | 1 ] = new TileVisual(TransitionL, Quaternion.Euler(x_rotation, 0, 0));
 
-        tileLookup[64 | 128 | 1 | 4 ] = new TileVisual(TransitionL, Quaternion.Euler(x_rotation, 180, 0));
-        tileLookup[64 | 32 | 16 | 4 ] = new TileVisual(TransitionR, Quaternion.Euler(x_rotation, 180, 0));
-        tileLookup[4 | 2 | 1 | 64 ] = new TileVisual(TransitionR, Quaternion.Euler(x_rotation, 0, 0));
-        tileLookup[4 | 8 | 16 | 64 ] = new TileVisual(TransitionL, Quaternion.Euler(x_rotation, 0, 0));
+        tileLookup[64 | 128 | 1 | 4 ] = new TileVisual(TransitionL, Quaternion.Euler(x_rotation, 90, 0));
+        tileLookup[64 | 32 | 16 | 4 ] = new TileVisual(TransitionR, Quaternion.Euler(x_rotation, 90, 0));
+        tileLookup[4 | 2 | 1 | 64 ] = new TileVisual(TransitionR, Quaternion.Euler(x_rotation, -90, 0));
+        tileLookup[4 | 8 | 16 | 64 ] = new TileVisual(TransitionL, Quaternion.Euler(x_rotation, -90, 0));
+
+        tileLookup[1 | 4 ] = new TileVisual(L, Quaternion.Euler(x_rotation, 90, 0));
+        tileLookup[1 | 64 ] = new TileVisual(L, Quaternion.Euler(x_rotation, 0, 0));
+        tileLookup[64 | 16 ] = new TileVisual(L, Quaternion.Euler(x_rotation, 270, 0));
+        tileLookup[16 | 4 ] = new TileVisual(L, Quaternion.Euler(x_rotation, 180, 0));
+
+        tileLookup[1|2|4|16|64 ] = new TileVisual(TransitionTwo, Quaternion.Euler(x_rotation, 270, 0));
+        tileLookup[1|64|16|4|8 ] = new TileVisual(TransitionTwo, Quaternion.Euler(x_rotation, 0, 0));
+        tileLookup[4|16|1|128|64 ] = new TileVisual(TransitionTwo, Quaternion.Euler(x_rotation, -180, 0));
+        tileLookup[1|4|16|32|64] = new TileVisual(TransitionTwo, Quaternion.Euler(x_rotation, 90, 0));
+
+        tileLookup[1 | 4 | 8| 16 | 64 | 128] = new TileVisual(SquareConnection, Quaternion.Euler(x_rotation, 0, 0));
+        tileLookup[1 | 2 | 4 | 16 | 32 | 64 ] = new TileVisual(SquareConnection, Quaternion.Euler(x_rotation, 90, 0));
+
+
+
+
+
+        
 
 
 
@@ -347,11 +352,12 @@ public class FarmGrid : MonoBehaviour
 
     void UpdateChunkAtTile(int x, int z)
     {
-        int cx = x / chunkSize;
-        int cz = z / chunkSize;
-        if(cx<0||cz<0||cx>=chunks.GetLength(0)||cz>=chunks.GetLength(1)) return;
+        //chunking disabled
+        // int cx = x / chunkSize;
+        // int cz = z / chunkSize;
+        // if(cx<0||cz<0||cx>=chunks.GetLength(0)||cz>=chunks.GetLength(1)) return;
 
-        RebuildChunk(cx, cz);
+        // RebuildChunk(cx, cz);
     }
 
     void RebuildChunk(int cx, int cz)
@@ -381,5 +387,15 @@ public class FarmGrid : MonoBehaviour
 
         chunk.mesh.Clear();
         chunk.mesh.CombineMeshes(chunk.combineList.ToArray(), true, true);
+    }
+
+    public void UntillTile(int x, int z)
+    {
+        FarmTile tile = GetTile(x, z);
+        if (tile == null || !tile.isTilled) return;
+
+        tile.isTilled = false;
+
+        UpdateTileAndNeighbors(x, z);
     }
 }
