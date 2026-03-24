@@ -6,6 +6,7 @@ public class TilePreview : MonoBehaviour
     public FarmGrid farmGrid;
     public LayerMask terrainMask;
     public float range = 10f;
+    public float height = 0.36f;
     
 
     void Update()
@@ -20,7 +21,7 @@ public class TilePreview : MonoBehaviour
             Vector3 worldPos = farmGrid.GridToWorld(gridPos.x, gridPos.y);
 
             // Slight offset to avoid z-fighting
-            worldPos.y += 0.05f;
+            worldPos.y += height;
 
             transform.position = worldPos;
         }

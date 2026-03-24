@@ -17,7 +17,9 @@ public class FarmTile
 {
     public bool isTilled = false;
     public GameObject visualObject; // The instantiated prefab
+    public GameObject sourcePrefab;
     public int lastMask = -1;
+    public CropInstance crop;
 }
 
 public class FarmChunk
@@ -47,6 +49,7 @@ public class FarmGrid : MonoBehaviour
     public GameObject SquareConnection;
 
     public int x_rotation = -90;
+    public float heightOffset =0.01f;
     [Header("Grid Settings")]
     public int width = 50;
     public int height = 50;
@@ -63,6 +66,12 @@ public class FarmGrid : MonoBehaviour
     private FarmTile[,] grid;
     private FarmChunk[,] chunks;
     private Dictionary<int, TileVisual> tileLookup;
+    private Dictionary<GameObject, Queue<GameObject>> pool = new Dictionary<GameObject, Queue<GameObject>>();
+
+    void Start()
+    {
+        PrewarmPool(Till_solo, 50);
+    }
 
     void Awake()
     {
@@ -74,6 +83,11 @@ public class FarmGrid : MonoBehaviour
 
         InitChunks();
         BuildTileLookup();
+    }
+
+    void Update()
+    {
+        GrowCrops(Time.deltaTime);
     }
 
     // ----------------------------
@@ -169,34 +183,32 @@ public class FarmGrid : MonoBehaviour
 
         int newMask = tile.isTilled ? GetBitmask(x, z) : -1;
 
-
         if (tile.lastMask == newMask) return;
-
         tile.lastMask = newMask;
 
-        // Remove old object
         if (tile.visualObject != null)
         {
-            Destroy(tile.visualObject);
+            ReturnToPool(tile.visualObject, tile.sourcePrefab);
             tile.visualObject = null;
+            tile.sourcePrefab = null;
         }
 
-        // If not tilled, stop here
         if (!tile.isTilled) return;
 
         TileVisual visual = GetTileVisual(x, z);
 
         if (instantiateObjects && visual.prefab != null)
         {
-            Vector3 pos = GridToWorld(x, z);
-            pos.y -= 0.01f;
+            GameObject obj = GetFromPool(visual.prefab);
 
-            tile.visualObject = Instantiate(
-                visual.prefab,
-                pos,
-                visual.rotation,
-                chunkParent
-            );
+            Vector3 pos = GridToWorld(x, z);
+            pos.y -= heightOffset;
+
+            obj.transform.SetPositionAndRotation(pos, visual.rotation);
+            obj.transform.SetParent(chunkParent);
+
+            tile.visualObject = obj;
+            tile.sourcePrefab = visual.prefab; // 🔥 track origin
         }
     }
 
@@ -397,5 +409,104 @@ public class FarmGrid : MonoBehaviour
         tile.isTilled = false;
 
         UpdateTileAndNeighbors(x, z);
+    }
+
+    GameObject GetFromPool(GameObject prefab)
+    {
+        if (pool.TryGetValue(prefab, out Queue<GameObject> queue))
+        {
+            if (queue.Count > 0)
+            {
+                GameObject obj = queue.Dequeue();
+                obj.SetActive(true);
+                return obj;
+            }
+        }
+
+        // Nothing available → create new
+        GameObject newObj = Instantiate(prefab);
+        return newObj;
+    }
+
+    void ReturnToPool(GameObject obj, GameObject prefab)
+    {
+        obj.SetActive(false);
+
+        if (!pool.ContainsKey(prefab))
+            pool[prefab] = new Queue<GameObject>();
+
+        pool[prefab].Enqueue(obj);
+    }
+
+    void PrewarmPool(GameObject prefab, int count)
+    {
+        if (!pool.ContainsKey(prefab))
+            pool[prefab] = new Queue<GameObject>();
+
+        for (int i = 0; i < count; i++)
+        {
+            GameObject obj = Instantiate(prefab);
+            obj.SetActive(false);
+            pool[prefab].Enqueue(obj);
+        }
+    }
+
+    public void PlantCrop(int x, int z, CropData cropData)
+    {
+        FarmTile tile = GetTile(x, z);
+
+        if (tile == null || !tile.isTilled || tile.crop != null)
+            return;
+
+        CropInstance crop = new CropInstance(cropData);
+        tile.crop = crop;
+
+        SpawnCropVisual(x, z);
+    }
+
+    void SpawnCropVisual(int x, int z)
+    {
+        FarmTile tile = GetTile(x, z);
+        if (tile?.crop == null) return;
+
+        CropInstance crop = tile.crop;
+
+        if (crop.visual != null)
+            Destroy(crop.visual);
+
+        GameObject prefab = crop.data.stagePrefabs[crop.growthStage];
+
+        Vector3 pos = GridToWorld(x, z);
+        pos.y += 0.1f;
+
+        crop.visual = Instantiate(prefab, pos, Quaternion.identity, chunkParent);
+    }
+
+    void GrowCrops(float deltaTime)
+    {
+        for (int x = 0; x < width; x++)
+        {
+            for (int z = 0; z < height; z++)
+            {
+                FarmTile tile = grid[x, z];
+                if (tile.crop == null) continue;
+
+                CropInstance crop = tile.crop;
+
+                if (crop.IsFullyGrown()) continue;
+
+                crop.timer += deltaTime;
+
+                if (crop.timer >= crop.data.growthTimes[crop.growthStage])
+                {
+                    crop.timer = 0f;
+                    crop.growthStage++;
+
+                    SpawnCropVisual(x, z);
+
+                    Debug.Log($"Crop at {x},{z} grew to stage {crop.growthStage}");
+                }
+            }
+        }
     }
 }
