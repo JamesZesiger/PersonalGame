@@ -19,6 +19,7 @@ public class FarmTile
     public GameObject visualObject; // The instantiated prefab
     public GameObject sourcePrefab;
     public int lastMask = -1;
+    public bool isPlanted = false;
     public CropInstance crop;
 }
 
@@ -31,6 +32,8 @@ public class FarmChunk
 
 public class FarmGrid : MonoBehaviour
 {
+    public Camera cam;
+
     [Header("Tile Prefabs")]
     public GameObject Till_solo;
     public GameObject Cap;
@@ -47,6 +50,9 @@ public class FarmGrid : MonoBehaviour
     public GameObject TransitionR;
     public GameObject TransitionTwo;
     public GameObject SquareConnection;
+    [Header("References")]
+    public Transform player;
+    public GameObject progressUIPrefab;
 
     public int x_rotation = -90;
     public float heightOffset =0.01f;
@@ -71,6 +77,15 @@ public class FarmGrid : MonoBehaviour
     void Start()
     {
         PrewarmPool(Till_solo, 50);
+
+        foreach (var cropData in Resources.LoadAll<CropData>(""))
+        {
+            foreach (var prefab in cropData.GetAllPrefabs())
+            {
+                if (prefab != null)
+                    PrewarmPool(prefab, 20);
+            }
+        }
     }
 
     void Awake()
@@ -81,13 +96,14 @@ public class FarmGrid : MonoBehaviour
             for (int z = 0; z < height; z++)
                 grid[x, z] = new FarmTile();
 
-        InitChunks();
+        //InitChunks();
         BuildTileLookup();
     }
 
     void Update()
     {
         GrowCrops(Time.deltaTime);
+
     }
 
     // ----------------------------
@@ -408,6 +424,23 @@ public class FarmGrid : MonoBehaviour
 
         tile.isTilled = false;
 
+        if (tile.crop != null)
+        {
+            if (tile.crop.visual != null)
+            {
+                ReturnToPool(tile.crop.visual, tile.crop.sourcePrefab);
+            }
+
+            if (tile.crop.progressUI != null)
+            {
+                ReturnToPool(tile.crop.progressUI.gameObject, progressUIPrefab);
+                tile.crop.progressUI = null;
+            }
+
+            tile.crop = null;
+            tile.isPlanted = false;
+        }
+
         UpdateTileAndNeighbors(x, z);
     }
 
@@ -460,7 +493,7 @@ public class FarmGrid : MonoBehaviour
 
         CropInstance crop = new CropInstance(cropData);
         tile.crop = crop;
-
+        tile.isPlanted = true;
         SpawnCropVisual(x, z);
     }
 
@@ -471,15 +504,64 @@ public class FarmGrid : MonoBehaviour
 
         CropInstance crop = tile.crop;
 
+        // Return old
         if (crop.visual != null)
-            Destroy(crop.visual);
+        {
+            ReturnToPool(crop.visual, crop.sourcePrefab);
+            crop.visual = null;
+            crop.sourcePrefab = null;
+        }
 
-        GameObject prefab = crop.data.stagePrefabs[crop.growthStage];
+        GameObject prefab = null;
+
+        switch (crop.state)
+        {
+            case CropState.Seed:
+                prefab = crop.data.seedPrefab;
+                break;
+            case CropState.Growing:
+                prefab = crop.data.growingPrefab;
+                break;
+            case CropState.ReGrowing:
+            prefab = crop.data.growingPrefab;
+            break;
+            case CropState.Ready:
+                prefab = crop.data.readyPrefab;
+                break;
+        }
 
         Vector3 pos = GridToWorld(x, z);
         pos.y += 0.1f;
 
-        crop.visual = Instantiate(prefab, pos, Quaternion.identity, chunkParent);
+        GameObject obj = GetFromPool(prefab);
+        obj.transform.SetPositionAndRotation(pos, Quaternion.identity);
+        obj.transform.SetParent(chunkParent);
+
+        crop.visual = obj;
+        crop.sourcePrefab = prefab;
+
+
+        if (crop.state == CropState.Growing)
+            obj.transform.localScale = Vector3.one * 0.5f;
+        else
+            obj.transform.localScale = Vector3.one;
+
+        // After spawning crop.visual
+
+        if (crop.progressUI != null)
+        {
+            ReturnToPool(crop.progressUI.gameObject, progressUIPrefab);
+            crop.progressUI = null;
+        }
+
+        // Spawn UI
+        GameObject uiObj = GetFromPool(progressUIPrefab);
+        uiObj.transform.SetParent(chunkParent);
+        CropProgressUI ui = uiObj.GetComponent<CropProgressUI>();
+
+        ui.Initialize(crop.visual.transform, cam, player);
+
+        crop.progressUI = ui;
     }
 
     void GrowCrops(float deltaTime)
@@ -493,20 +575,101 @@ public class FarmGrid : MonoBehaviour
 
                 CropInstance crop = tile.crop;
 
-                if (crop.IsFullyGrown()) continue;
-
                 crop.timer += deltaTime;
 
-                if (crop.timer >= crop.data.growthTimes[crop.growthStage])
+
+                float t = 0f;
+                
+
+                switch (crop.state)
                 {
-                    crop.timer = 0f;
-                    crop.growthStage++;
+                    case CropState.Seed:
+                        t = crop.timer / crop.data.seedToGrowingTime;
+                        if (crop.timer >= crop.data.seedToGrowingTime)
+                        {
+                            crop.timer = 0f;
+                            crop.state = CropState.Growing;
+                            SpawnCropVisual(x, z);
+                        }
+                        break;
 
-                    SpawnCropVisual(x, z);
+                    case CropState.Growing:
+                        
+                        t = crop.timer / crop.data.growingToReadyTime;
+                        if (crop.visual != null)
+                        {
+                            float scale = Mathf.Lerp(0.5f, 1f, Mathf.SmoothStep(0, 1, t));
+                            crop.visual.transform.localScale = Vector3.one * scale;
+                        }
 
-                    Debug.Log($"Crop at {x},{z} grew to stage {crop.growthStage}");
+                        if (crop.timer >= crop.data.growingToReadyTime)
+                        {
+                            crop.timer = 0f;
+                            crop.state = CropState.Ready;
+                            
+                            SpawnCropVisual(x, z);
+                        }
+                        break;
+                    case CropState.ReGrowing:
+                        t = crop.timer / crop.data.growingToReadyTime;
+
+                        if (crop.timer >= crop.data.growingToReadyTime)
+                        {
+                            crop.timer = 0f;
+                            crop.state = CropState.Ready;
+                            
+                            SpawnCropVisual(x, z);
+                        }
+                        break;
+                    case CropState.Ready:
+                         t = 1f;
+                        
+                        break;
                 }
+
+                if (crop.progressUI != null && crop.progressUI.canvasGroup.alpha > 0.01f)
+                    crop.progressUI.SetProgress(Mathf.Clamp01(t));
+
             }
         }
+    }
+
+    public bool TryHarvest(int x, int z)
+    {
+        FarmTile tile = GetTile(x, z);
+        if (tile?.crop == null) return false;
+
+        CropInstance crop = tile.crop;
+
+        if (!crop.IsReady()) return false;
+
+        Debug.Log($"Harvested {crop.data.cropName}");
+
+        if (crop.data.regrowable)
+        {
+            crop.state = CropState.ReGrowing;
+            crop.timer = 0f;
+
+            SpawnCropVisual(x, z);
+
+            if (crop.visual != null)
+                crop.visual.transform.localScale = Vector3.one;
+        }
+        else
+        {
+            if (crop.visual != null)
+                ReturnToPool(crop.visual, crop.sourcePrefab);
+
+            if (crop.progressUI != null)
+            {
+                ReturnToPool(crop.progressUI.gameObject, progressUIPrefab);
+                crop.progressUI = null;
+            }
+
+            tile.crop = null;
+            tile.isPlanted = false;
+        }
+
+        return true; 
     }
 }

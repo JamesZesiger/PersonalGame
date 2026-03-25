@@ -10,14 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dadd1927bd2799245878aa8fb06b1f83, type: 3}
-  m_Name: New Crop Data
+  m_Name: CornData
   m_EditorClassIdentifier: Assembly-CSharp::CropData
-  cropName: carrot
-  growthTimes:
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  stagePrefabs:
-  - {fileID: 116537986658121640, guid: 24b191dd9f7a4e74183d9070806db521, type: 3}
+  cropName: 
+  seedPrefab: {fileID: 6075288191169580723, guid: a661a48ce3fcd874b9218f0bf4448f6f, type: 3}
+  growingPrefab: {fileID: 1524010281241650038, guid: d907130f648af82458814a774f827066, type: 3}
+  readyPrefab: {fileID: 3008166924999846343, guid: 0e88bea729ea4d04eb8b1c6d676dfdc5, type: 3}
+  seedToGrowingTime: 5
+  growingToReadyTime: 10
+  regrowable: 1
+  regrowTime: 8

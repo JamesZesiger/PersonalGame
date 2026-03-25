@@ -1,20 +1,21 @@
 using UnityEngine;
-
 public class CropInstance
 {
     public CropData data;
-    public int growthStage = 0;
+    public CropProgressUI progressUI;
+    public CropState state = CropState.Seed;
     public float timer = 0f;
 
     public GameObject visual;
+    public GameObject sourcePrefab;
 
     public CropInstance(CropData data)
     {
         this.data = data;
     }
 
-    public bool IsFullyGrown()
+    public bool IsReady()
     {
-        return growthStage >= data.stagePrefabs.Length - 1;
+        return state == CropState.Ready;
     }
 }

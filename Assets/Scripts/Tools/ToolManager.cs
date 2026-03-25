@@ -10,6 +10,7 @@ public class ToolManager : MonoBehaviour
     [Header("Tool Setup")]
     public Tool[] toolPrefabs;   // PREFABS, not scene objects
     public Transform toolHolder; // where the tool spawns (hand)
+    public TilePreview tilePreviewScript;
 
     private Tool currentToolInstance;
     private int currentToolIndex = 0;
@@ -35,8 +36,8 @@ public class ToolManager : MonoBehaviour
 
     public void OnUse()
     {
-
-        currentToolInstance?.Use();
+        if (tilePreviewScript.isEnabled)
+            currentToolInstance?.Use();
         
     }
 
