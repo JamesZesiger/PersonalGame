@@ -15,11 +15,11 @@ public class ItemSelectionUI : MonoBehaviour
     {
         this.cam = cam;
         this.player = player;
-        canvasGroup.alpha = 1f;
+        canvasGroup.alpha = 0f;
     }
     void Start()
     {
-        
+        canvasGroup.alpha = 0f;
     }
 
     // Update is called once per frame

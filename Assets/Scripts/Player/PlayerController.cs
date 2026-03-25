@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform cameraTransform;
     public FarmInteraction farmInteraction;
     [SerializeField] ToolManager toolManager;
+    [SerializeField] InventoryUI inventoryUI;
 
     [Header("Movement")]
     [SerializeField] float walkSpeed = 6f;
@@ -47,6 +48,7 @@ public class PlayerController : MonoBehaviour
             cameraTransform = Camera.main.transform;
         if (farmInteraction == null)
             farmInteraction = GetComponent<FarmInteraction>();
+
     }
 
     void Update()
@@ -187,5 +189,10 @@ public class PlayerController : MonoBehaviour
     {
         if (value.isPressed)
             toolManager.NextTool();
+    }
+    void OnInventory(InputValue value)
+    {
+        if (value.isPressed)
+            inventoryUI.openInventory();
     }
 }

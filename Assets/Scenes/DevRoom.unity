@@ -448,6 +448,7 @@ GameObject:
   - component: {fileID: 843614603}
   - component: {fileID: 843614602}
   - component: {fileID: 843614601}
+  - component: {fileID: 843614605}
   m_Layer: 5
   m_Name: Inventory
   m_TagString: Untagged
@@ -538,6 +539,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &843614605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 843614600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98ec7d6fd5b0c1f4d928f9e29adc436a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InventoryUI
+  inventory: {fileID: 2136895839}
+  slotPrefab: {fileID: 5265966615077184856, guid: 25f0e08f2e8f3e74797babb6034c76a0, type: 3}
+  inventoryPanel: {fileID: 1573488458}
+  gridParent: {fileID: 1573488459}
 --- !u!1 &874465521
 GameObject:
   m_ObjectHideFlags: 0
@@ -590,7 +607,7 @@ Terrain:
   m_TreeBillboardDistance: 50
   m_TreeCrossFadeLength: 10
   m_TreeMaximumFullLODCount: 50
-  m_DetailObjectDistance: 0
+  m_DetailObjectDistance: 50
   m_DetailObjectDensity: 1
   m_HeightmapPixelError: 5
   m_SplatMapDistance: 100
@@ -934,6 +951,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1456335977 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3929501390862608285, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
+  m_PrefabInstance: {fileID: 1089493990418590195}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1470171931 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1382151820736394693, guid: 169087ed26070db4ba061dbf7673a9b6, type: 3}
@@ -978,10 +1000,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 843614604}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1573488460
 MonoBehaviour:
@@ -996,15 +1018,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GridLayoutGroup
   m_Padding:
-    m_Left: 0
-    m_Right: 0
+    m_Left: 150
+    m_Right: 150
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 0
+  m_ChildAlignment: 4
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 100, y: 100}
-  m_Spacing: {x: 0, y: 0}
+  m_CellSize: {x: 64, y: 64}
+  m_Spacing: {x: 2, y: 2}
   m_Constraint: 0
   m_ConstraintCount: 2
 --- !u!156049354 &1573488461
@@ -1159,6 +1181,20 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7523265889633547192, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
   m_PrefabInstance: {fileID: 1089493990418590195}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2136895839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1456335977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eeb26fe9498bc5f47b2c461e1cb8ff17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Inventory
+  size: 21
+  items: []
 --- !u!1001 &137255067297545057
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1232,6 +1268,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2990031896187565177, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
+      propertyPath: inventoryUI
+      value: 
+      objectReference: {fileID: 843614605}
     - target: {fileID: 3929501390862608285, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
       propertyPath: m_Name
       value: Player
@@ -1307,7 +1347,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3929501390862608285, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2136895839}
   m_SourcePrefab: {fileID: 100100000, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
 --- !u!1001 &4976987096667438791
 PrefabInstance:

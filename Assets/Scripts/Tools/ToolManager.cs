@@ -53,7 +53,7 @@ public class ToolManager : MonoBehaviour
         {
             Destroy(currentToolInstance.gameObject);
         }
-        selectionUI.setIcon(toolPrefabs[index].sprite);
+        
         // Spawn new tool
         currentToolInstance = Instantiate(toolPrefabs[index], toolHolder);
 
@@ -63,6 +63,7 @@ public class ToolManager : MonoBehaviour
     public void NextTool()
     {
         int nextIndex = (currentToolIndex + 1) % toolPrefabs.Length;
+        selectionUI.setIcon(toolPrefabs[nextIndex].sprite);
         EquipTool(nextIndex);
     }
 
@@ -70,7 +71,7 @@ public class ToolManager : MonoBehaviour
     {
         int prevIndex = currentToolIndex - 1;
         if (prevIndex < 0) prevIndex = toolPrefabs.Length - 1;
-
+        selectionUI.setIcon(toolPrefabs[prevIndex].sprite);
         EquipTool(prevIndex);
     }
 }

@@ -103,7 +103,7 @@ Material:
     - _AlphaToMask: 0
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
-    - _BumpScale: 0.5
+    - _BumpScale: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _Cull: 2
@@ -131,8 +131,8 @@ Material:
     - _XRMotionVectorsPass: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.5754717, g: 0.42707962, b: 0.24158953, a: 1}
-    - _Color: {r: 0.57547164, g: 0.4270796, b: 0.24158949, a: 1}
+    - _BaseColor: {r: 0.5597484, g: 0.44249734, b: 0.29747632, a: 1}
+    - _Color: {r: 0.5597484, g: 0.4424973, b: 0.2974763, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
