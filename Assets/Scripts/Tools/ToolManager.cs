@@ -7,6 +7,8 @@ public class ToolManager : MonoBehaviour
     public Camera cam;
     public FarmGrid grid;
     public GameObject preview;
+    public ItemSelectionUI selectionUI;
+
     [Header("Tool Setup")]
     public Tool[] toolPrefabs;   // PREFABS, not scene objects
     public Transform toolHolder; // where the tool spawns (hand)
@@ -51,14 +53,14 @@ public class ToolManager : MonoBehaviour
         {
             Destroy(currentToolInstance.gameObject);
         }
-
+        selectionUI.setIcon(toolPrefabs[index].sprite);
         // Spawn new tool
         currentToolInstance = Instantiate(toolPrefabs[index], toolHolder);
 
         currentToolInstance.Initialize(cam, grid, preview);
     }
 
-    void NextTool()
+    public void NextTool()
     {
         int nextIndex = (currentToolIndex + 1) % toolPrefabs.Length;
         EquipTool(nextIndex);

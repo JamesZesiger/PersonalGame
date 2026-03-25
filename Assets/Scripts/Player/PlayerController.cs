@@ -183,4 +183,9 @@ public class PlayerController : MonoBehaviour
         if (value.isPressed)
             toolManager.OnUse();
     }
+    void OnNext(InputValue value)
+    {
+        if (value.isPressed)
+            toolManager.NextTool();
+    }
 }

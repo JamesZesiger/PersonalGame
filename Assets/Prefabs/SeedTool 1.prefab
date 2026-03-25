@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1753575561217543399}
   - component: {fileID: 6536107753462126578}
   m_Layer: 0
-  m_Name: SeedTool
+  m_Name: SeedTool 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,9 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47b1a3efc4fd382429f22b4c19fdb153, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SeedTool
-  toolName: Corn
-  sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
-  cropToPlant: {fileID: 11400000, guid: 687e6629a46cb67449e62bd8a402f315, type: 2}
+  toolName: carrot
+  sprite: {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
+  cropToPlant: {fileID: 11400000, guid: e97340980926dee4cb264620ac8f1d96, type: 2}
 --- !u!1 &3297693493389563985
 GameObject:
   m_ObjectHideFlags: 0
@@ -115,7 +115,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5f82901e829f6f245b4b4d0fab60acce, type: 2}
+  - {fileID: 2100000, guid: e8c91ffdb536da546a44c73f75908966, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

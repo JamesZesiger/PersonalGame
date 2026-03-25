@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HoeTool
   toolName: Hoe
+  sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
   cam: {fileID: 0}
   grid: {fileID: 0}
   terrainMask:
