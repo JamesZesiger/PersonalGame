@@ -10,7 +10,6 @@ public class ShovelTool : Tool
         this.grid = grid;
         this.preview = preview;
 
-        Debug.Log("[Shovel] Initialized");
     }
 
     public override void Use()
