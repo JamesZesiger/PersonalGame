@@ -9,6 +9,7 @@ public class CropData : ScriptableObject
     public GameObject seedPrefab;
     public GameObject growingPrefab;
     public GameObject readyPrefab;
+    public Item item;
 
     [Header("Timing")]
     public float seedToGrowingTime = 5f;

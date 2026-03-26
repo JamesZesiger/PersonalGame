@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public class InventoryUI : MonoBehaviour
 {
@@ -27,16 +28,19 @@ public class InventoryUI : MonoBehaviour
     {
         for (int i = 0; i < slots.Length; i++)
         {
-            Debug.Log(i);
+           
             var icon = slots[i].transform.GetChild(0).GetComponent<UnityEngine.UI.Image>();
-
+            var text = slots[i].transform.GetChild(1).GetComponent<TMP_Text>();
             if (i < inventory.items.Count)
             {
-                icon.sprite = inventory.items[i].icon;
+                text.text = $"{inventory.items[i].quantity}";
+                Debug.Log(inventory.items[i].item.icon);
+                icon.sprite = inventory.items[i].item.icon;
                 icon.enabled = true;
             }
             else
             {
+                text.text = "";
                 icon.enabled = false;
             }
         }
@@ -62,5 +66,12 @@ public class InventoryUI : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
+    }
+
+    public void TryAdd(Item item)
+    {
+        if (item == null) return;
+        inventory.AddItem(item);
+        UpdateUI();
     }
 }

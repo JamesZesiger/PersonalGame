@@ -53,6 +53,7 @@ public class FarmGrid : MonoBehaviour
     [Header("References")]
     public Transform player;
     public GameObject progressUIPrefab;
+    public InventoryUI inventoryUI;
 
     public int x_rotation = -90;
     public float heightOffset =0.01f;
@@ -642,6 +643,9 @@ public class FarmGrid : MonoBehaviour
         CropInstance crop = tile.crop;
 
         if (!crop.IsReady()) return false;
+        Debug.Log($"{crop.data.item.name}");
+        if (crop.data.item != null)
+            inventoryUI.TryAdd(crop.data.item);
 
         Debug.Log($"Harvested {crop.data.cropName}");
 
