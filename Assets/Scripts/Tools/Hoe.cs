@@ -16,18 +16,9 @@ public class HoeTool : Tool
     }
     public override void Use()
     {
-        Debug.Log("hoe used");
-        if (preview == null || grid == null) return;
-        Debug.Log("next");
+        Debug.Log("till");
         Vector2Int gridPos = grid.WorldToGrid(preview.transform.position);
-        FarmTile tile = grid.GetTile(gridPos.x, gridPos.y);
-
-        if (tile != null && !tile.isTilled)
-        {
-            grid.TillTile(gridPos.x, gridPos.y);
-            tile.isTilled = true;
-
-            Debug.Log($"[Hoe] Tilled tile at {gridPos}");
-        }
+        Debug.Log($"{gridPos.x}, {gridPos.y}");
+        grid.SetTileType(gridPos.x, gridPos.y, TileType.Tilled);
     }
 }

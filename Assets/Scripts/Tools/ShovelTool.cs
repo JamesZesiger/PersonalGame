@@ -21,9 +21,9 @@ public class ShovelTool : Tool
         }
 
         Vector2Int gridPos = grid.WorldToGrid(preview.transform.position);
-        FarmTile tile = grid.GetTile(gridPos.x, gridPos.y);
+        Tile tile = grid.GetTile(gridPos.x, gridPos.y);
 
-        if (tile != null && tile.isTilled)
+        if (tile != null && tile.type == TileType.Tilled)
         {
             grid.UntillTile(gridPos.x, gridPos.y);
 
