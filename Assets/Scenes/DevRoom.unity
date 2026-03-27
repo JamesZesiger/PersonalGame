@@ -1549,6 +1549,18 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -400
       objectReference: {fileID: 0}
+    - target: {fileID: 8517187190941054987, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8517187190941054987, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 2560
+      objectReference: {fileID: 0}
+    - target: {fileID: 8517187190941054987, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1440
+      objectReference: {fileID: 0}
     - target: {fileID: 9059889178407162536, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
       propertyPath: inventoryPanel
       value: 
