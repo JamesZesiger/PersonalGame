@@ -34,7 +34,6 @@ public class InventoryUI : MonoBehaviour
             if (i < inventory.items.Count)
             {
                 text.text = $"{inventory.items[i].quantity}";
-                Debug.Log(inventory.items[i].item.icon);
                 icon.sprite = inventory.items[i].item.icon;
                 icon.enabled = true;
             }

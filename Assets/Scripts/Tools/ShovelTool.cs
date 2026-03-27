@@ -16,7 +16,6 @@ public class ShovelTool : Tool
     {
         if (grid == null || preview == null)
         {
-            Debug.LogWarning("[Shovel] Missing references!");
             return;
         }
 
@@ -27,7 +26,6 @@ public class ShovelTool : Tool
         {
             grid.UntillTile(gridPos.x, gridPos.y);
 
-            Debug.Log($"[Shovel] Cleared tile at {gridPos}");
         }
     }
 }

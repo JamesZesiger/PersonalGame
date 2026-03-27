@@ -19,12 +19,10 @@ public class FarmInteraction : MonoBehaviour
 
         Vector2Int gridPos = grid.WorldToGrid(preview.transform.position);
         Tile tile = grid.GetTile(gridPos.x, gridPos.y);
-        Debug.Log(tile);
         if (tile != null)
             {
                 grid.TillTile(gridPos.x,gridPos.y);
                 tile.type = TileType.Tilled;
-                Debug.Log($"Tilled tile at {gridPos}");
             }
     }
 }

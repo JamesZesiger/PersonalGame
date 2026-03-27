@@ -174,7 +174,6 @@ public class FarmGrid : MonoBehaviour
         if (bottomLeft) mask |= 32;
         if (left) mask |= 64;
         if (topLeft) mask |= 128;
-        Debug.Log(mask);
         return mask;
     }
 
@@ -389,7 +388,6 @@ public class FarmGrid : MonoBehaviour
         CropInstance crop = tile.crop;
 
         if (!crop.IsReady()) return false;
-        Debug.Log($"{crop.data.item.name}");
         if (crop.data.item != null)
             inventoryUI.TryAdd(crop.data.item);
 

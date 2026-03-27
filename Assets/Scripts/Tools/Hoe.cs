@@ -16,9 +16,7 @@ public class HoeTool : Tool
     }
     public override void Use()
     {
-        Debug.Log("till");
         Vector2Int gridPos = grid.WorldToGrid(preview.transform.position);
-        Debug.Log($"{gridPos.x}, {gridPos.y}");
         grid.SetTileType(gridPos.x, gridPos.y, TileType.Tilled);
     }
 }

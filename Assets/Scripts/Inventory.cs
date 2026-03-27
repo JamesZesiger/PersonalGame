@@ -14,7 +14,6 @@ public class Inventory : MonoBehaviour
             if (slot.item == item && item.isStackable && slot.quantity < item.maxStack)
             {
                 slot.quantity++;
-                Debug.Log($"Stacked {item.name}, now {slot.quantity}");
                 return;
             }
         }
@@ -22,11 +21,9 @@ public class Inventory : MonoBehaviour
         // Add new stack if space
         if (items.Count >= size)
         {
-            Debug.Log("Inventory full");
             return;
         }
 
         items.Add(new InventorySlot(item, 1));
-        Debug.Log($"{item.name} added as new stack");
     }
 }
