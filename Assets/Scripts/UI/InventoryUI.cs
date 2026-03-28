@@ -7,11 +7,12 @@ public class InventoryUI : MonoBehaviour
     public GameObject slotPrefab;
     public GameObject inventoryPanel;
     public Transform gridParent;
+    public UIManager uiManager;
+    public Inventory currentInventory;
+    public bool isPlayerInventory;
 
     private GameObject[] slots;
     private bool isOpen = false;
-
-    private Inventory currentInventory;
 
     public void Init(Inventory inventory)
     {
@@ -29,6 +30,11 @@ public class InventoryUI : MonoBehaviour
         for (int i = 0; i < inventory.size; i++)
         {
             GameObject slot = Instantiate(slotPrefab, gridParent);
+
+            var slotUI = slot.GetComponent<InventorySlotUI>();
+            slotUI.index = i;
+            slotUI.parentUI = this;
+
             slots[i] = slot;
         }
 
@@ -69,5 +75,23 @@ public class InventoryUI : MonoBehaviour
     {
         Cursor.lockState = isOpen ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = isOpen;
+    }
+
+    public void HandleShiftClick(int index)
+    {
+        if (currentInventory == null) return;
+        if (index >= currentInventory.items.Count) return;
+
+        InventorySlot slot = currentInventory.items[index];
+
+        Inventory target = isPlayerInventory
+            ? uiManager.currentContainerInventory
+            : uiManager.currentPlayerInventory;
+
+        if (target == null) return;
+
+        currentInventory.TransferTo(target, slot);
+
+        uiManager.RefreshAll();
     }
 }

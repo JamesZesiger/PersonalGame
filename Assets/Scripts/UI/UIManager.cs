@@ -5,8 +5,8 @@ public class UIManager : MonoBehaviour
     public InventoryUI playerUI;
     public InventoryUI containerUI;
 
-    private Inventory currentPlayerInventory;
-    private Inventory currentContainerInventory;
+    public Inventory currentPlayerInventory;
+    public Inventory currentContainerInventory;
 
     public bool IsOpen { get; private set; }
 
@@ -79,5 +79,22 @@ public class UIManager : MonoBehaviour
     {
         Cursor.lockState = state ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = state;
+    }
+
+    public Inventory GetOtherInventory(Inventory source)
+    {
+        if (source == currentPlayerInventory)
+            return currentContainerInventory;
+
+        if (source == currentContainerInventory)
+            return currentPlayerInventory;
+
+        return null;
+    }
+
+    public void RefreshAll()
+    {
+        playerUI.UpdateUI();
+        containerUI.UpdateUI();
     }
 }

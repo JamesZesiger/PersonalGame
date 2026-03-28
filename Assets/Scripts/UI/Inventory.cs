@@ -43,5 +43,23 @@ public class Inventory : MonoBehaviour
         }
 
         return remaining; // leftover if inventory is full
+    
+    
+    }
+
+    public int TransferTo(Inventory target, InventorySlot slot)
+    {
+        if (slot == null || slot.item == null) return 0;
+        
+        int amount = slot.quantity;
+        int leftover = target.AddItem(slot.item, amount);
+        int moved = amount - leftover;
+        slot.quantity -= moved;
+        if (slot.quantity <= 0)
+        {
+            items.Remove(slot);
+        }
+
+        return moved;
     }
 }
