@@ -675,6 +675,9 @@ MonoBehaviour:
   slotPrefab: {fileID: 5265966615077184856, guid: 25f0e08f2e8f3e74797babb6034c76a0, type: 3}
   inventoryPanel: {fileID: 277698038}
   gridParent: {fileID: 775430122}
+  uiManager: {fileID: 951731379}
+  currentInventory: {fileID: 0}
+  isPlayerInventory: 1
 --- !u!224 &843614604 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5019869673918854660, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
@@ -804,6 +807,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIManager
   playerUI: {fileID: 775430127}
   containerUI: {fileID: 1045422510}
+  currentPlayerInventory: {fileID: 0}
+  currentContainerInventory: {fileID: 0}
 --- !u!224 &951731380
 RectTransform:
   m_ObjectHideFlags: 0
@@ -952,6 +957,9 @@ MonoBehaviour:
   slotPrefab: {fileID: 5265966615077184856, guid: 25f0e08f2e8f3e74797babb6034c76a0, type: 3}
   inventoryPanel: {fileID: 0}
   gridParent: {fileID: 1045422505}
+  uiManager: {fileID: 951731379}
+  currentInventory: {fileID: 0}
+  isPlayerInventory: 0
 --- !u!1 &1115443335
 GameObject:
   m_ObjectHideFlags: 0
