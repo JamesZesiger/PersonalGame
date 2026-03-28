@@ -538,6 +538,81 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   priority: 0
+--- !u!1 &652427547
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 652427548}
+  - component: {fileID: 652427550}
+  - component: {fileID: 652427549}
+  m_Layer: 7
+  m_Name: Image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &652427548
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 652427547}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1638303884}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 128, y: 128}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &652427549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 652427547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &652427550
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 652427547}
+  m_CullTransparentMesh: 1
 --- !u!1 &724313371
 GameObject:
   m_ObjectHideFlags: 0
@@ -676,7 +751,7 @@ MonoBehaviour:
   inventoryPanel: {fileID: 277698038}
   gridParent: {fileID: 775430122}
   uiManager: {fileID: 951731379}
-  currentInventory: {fileID: 0}
+  currentInventory: {fileID: 2136895839}
   isPlayerInventory: 1
 --- !u!224 &843614604 stripped
 RectTransform:
@@ -786,6 +861,7 @@ GameObject:
   m_Component:
   - component: {fileID: 951731380}
   - component: {fileID: 951731379}
+  - component: {fileID: 951731381}
   m_Layer: 7
   m_Name: UIManager
   m_TagString: Untagged
@@ -828,6 +904,19 @@ RectTransform:
   m_AnchoredPosition: {x: 1280.0001, y: 3049.9639}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &951731381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 951731378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28674de5f31437240ba7ab2f7e743286, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemTransferHandler
+  selectionHighlight: {fileID: 0}
 --- !u!1 &1045422504
 GameObject:
   m_ObjectHideFlags: 0
@@ -955,10 +1044,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventoryUI
   slotPrefab: {fileID: 5265966615077184856, guid: 25f0e08f2e8f3e74797babb6034c76a0, type: 3}
-  inventoryPanel: {fileID: 0}
+  inventoryPanel: {fileID: 1045422504}
   gridParent: {fileID: 1045422505}
   uiManager: {fileID: 951731379}
-  currentInventory: {fileID: 0}
+  currentInventory: {fileID: 456346582}
   isPlayerInventory: 0
 --- !u!1 &1115443335
 GameObject:
@@ -1274,6 +1363,56 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8356dd4f601bd484d81287ea0791666a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FarmGrid
+--- !u!1 &1638303883
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1638303884}
+  - component: {fileID: 1638303885}
+  m_Layer: 7
+  m_Name: CursorItemPreview
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1638303884
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1638303883}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 652427548}
+  m_Father: {fileID: 843614604}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1638303885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1638303883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab1f9dda0294866498ccbb4141c1c30c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CursorItemPreview
+  previewIcon: {fileID: 652427549}
 --- !u!1 &1884508710
 GameObject:
   m_ObjectHideFlags: 0
@@ -2098,6 +2237,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5019869673918854660, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
       insertIndex: -1
       addedObject: {fileID: 236681703}
+    - targetCorrespondingSourceObject: {fileID: 5019869673918854660, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1638303884}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6710945996188953724, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
       insertIndex: -1

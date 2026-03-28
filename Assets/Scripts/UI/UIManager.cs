@@ -66,6 +66,7 @@ public class UIManager : MonoBehaviour
     // ---------------- CLOSE ----------------
     public void CloseAll()
     {
+        ItemTransferHandler.Instance?.ClearSelection();
         playerUI.gameObject.SetActive(false);
         containerUI.gameObject.SetActive(false);
 

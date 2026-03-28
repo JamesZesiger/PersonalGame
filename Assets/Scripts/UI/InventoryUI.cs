@@ -94,4 +94,13 @@ public class InventoryUI : MonoBehaviour
 
         uiManager.RefreshAll();
     }
+
+    public void HandleClick(int index)
+    {
+        Debug.Log("click");
+        if (currentInventory == null) return;
+        Debug.Log("clicked");
+        InventorySlot slot = index < currentInventory.items.Count ? currentInventory.items[index] : null;
+        ItemTransferHandler.Instance.OnSlotClicked(currentInventory, slot, this);
+    }
 }
