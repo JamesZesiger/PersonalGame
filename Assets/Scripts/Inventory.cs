@@ -6,24 +6,42 @@ public class Inventory : MonoBehaviour
     public int size = 20;
     public List<InventorySlot> items = new List<InventorySlot>();
 
-    public void AddItem(Item item)
+    public int AddItem(Item item, int amount = 1)
     {
-        // Try to fill existing stacks first
-        foreach (var slot in items)
+        if (item == null) return amount;
+
+        int remaining = amount;
+
+        // 1. Fill existing stacks
+        if (item.isStackable)
         {
-            if (slot.item == item && item.isStackable && slot.quantity < item.maxStack)
+            foreach (var slot in items)
             {
-                slot.quantity++;
-                return;
+                if (slot.item == item && slot.quantity < item.maxStack)
+                {
+                    int space = item.maxStack - slot.quantity;
+                    int toAdd = Mathf.Min(space, remaining);
+
+                    slot.quantity += toAdd;
+                    remaining -= toAdd;
+
+                    if (remaining <= 0)
+                        return 0;
+                }
             }
         }
 
-        // Add new stack if space
-        if (items.Count >= size)
+        // 2. Create new stacks
+        while (remaining > 0 && items.Count < size)
         {
-            return;
+            int toAdd = item.isStackable
+                ? Mathf.Min(item.maxStack, remaining)
+                : 1;
+
+            items.Add(new InventorySlot(item, toAdd));
+            remaining -= toAdd;
         }
 
-        items.Add(new InventorySlot(item, 1));
+        return remaining; // leftover if inventory is full
     }
 }

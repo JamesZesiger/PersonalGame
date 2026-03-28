@@ -11,7 +11,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform cameraTransform;
     public FarmInteraction farmInteraction;
     [SerializeField] ToolManager toolManager;
-    [SerializeField] InventoryUI inventoryUI;
+    [SerializeField] UIManager uiManager;
+    [SerializeField] Inventory playerInventory;
 
     [Header("Movement")]
     [SerializeField] float walkSpeed = 6f;
@@ -192,7 +193,8 @@ public class PlayerController : MonoBehaviour
     }
     void OnInventory(InputValue value)
     {
-        if (value.isPressed)
-            inventoryUI.openInventory();
+        if (!value.isPressed) return;
+
+        uiManager.TogglePlayerInventory(playerInventory);
     }
 }

@@ -1380,7 +1380,6 @@ GameObject:
   - component: {fileID: 2008399631360917721}
   - component: {fileID: 8517187190941054987}
   - component: {fileID: 2924045881108057151}
-  - component: {fileID: 9059889178407162536}
   m_Layer: 5
   m_Name: Inventory
   m_TagString: Untagged
@@ -1471,22 +1470,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &9059889178407162536
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3161972502729587290}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98ec7d6fd5b0c1f4d928f9e29adc436a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::InventoryUI
-  inventory: {fileID: 559941299509951046}
-  slotPrefab: {fileID: 5265966615077184856, guid: 25f0e08f2e8f3e74797babb6034c76a0, type: 3}
-  inventoryPanel: {fileID: 6710945996188953724}
-  gridParent: {fileID: 8447228893153149425}
 --- !u!1 &3355692327604797541
 GameObject:
   m_ObjectHideFlags: 0
@@ -2645,7 +2628,8 @@ MonoBehaviour:
   cameraTransform: {fileID: 7632789679988204642}
   farmInteraction: {fileID: 7850872691984466819}
   toolManager: {fileID: 2299427154192918428}
-  inventoryUI: {fileID: 9059889178407162536}
+  uiManager: {fileID: 0}
+  playerInventory: {fileID: 0}
   walkSpeed: 4
   sprintSpeed: 6
   acceleration: 20
@@ -2727,6 +2711,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInteraction
   grid: {fileID: 0}
   preview: {fileID: 0}
+  projector: {fileID: 0}
+  interactRange: 5
+  interactMask:
+    serializedVersion: 2
+    m_Bits: 0
+  inventory: {fileID: 0}
 --- !u!114 &559941299509951046
 MonoBehaviour:
   m_ObjectHideFlags: 0

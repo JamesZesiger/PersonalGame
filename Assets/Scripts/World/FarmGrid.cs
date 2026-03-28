@@ -18,7 +18,7 @@ public class FarmGrid : MonoBehaviour
     public Transform tileParent;
     public Vector3 originPosition;
     public GameObject progressUIPrefab;
-    public InventoryUI inventoryUI;
+    public Inventory playerInventory;
     public Transform player;
     public Camera cam;
 
@@ -380,7 +380,7 @@ public class FarmGrid : MonoBehaviour
         }
     }
 
-    public bool TryHarvest(int x, int z)
+    public bool TryHarvest(int x, int z, Inventory targetInventory)
     {
         Tile tile = GetTile(x, z);
         if (tile?.crop == null) return false;
@@ -389,7 +389,15 @@ public class FarmGrid : MonoBehaviour
 
         if (!crop.IsReady()) return false;
         if (crop.data.item != null)
-            inventoryUI.TryAdd(crop.data.item);
+        {
+            int leftover = targetInventory.AddItem(crop.data.item, 1);
+
+            if (leftover > 0)
+            {
+                Debug.Log("Inventory full!");
+                return false;
+            }
+        }
 
         Debug.Log($"Harvested {crop.data.cropName}");
 

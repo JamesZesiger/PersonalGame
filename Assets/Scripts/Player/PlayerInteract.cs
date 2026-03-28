@@ -10,6 +10,7 @@ public class PlayerInteraction : MonoBehaviour
     public GameObject projector;
     public float interactRange = 5f;
     public LayerMask interactMask;
+    public Inventory inventory;
 
     public void OnInteract()
     {
@@ -29,7 +30,7 @@ public class PlayerInteraction : MonoBehaviour
 
         // 🔹 Fallback → grid interaction
         Vector2Int pos = grid.WorldToGrid(preview.transform.position);
-        grid.TryHarvest(pos.x, pos.y);
+        grid.TryHarvest(pos.x, pos.y, inventory);
     }
 }
 
