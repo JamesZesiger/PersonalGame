@@ -15,6 +15,9 @@ public class CropData : ScriptableObject
     public float seedToGrowingTime = 5f;
     public float growingToReadyTime = 10f;
 
+    [Header("value")]
+    public int value = 10; 
+
     [Header("Behavior")]
     public bool regrowable = false;
     public float regrowTime = 8f; // ready → ready again after harvest

@@ -7,4 +7,5 @@ public class Item : ScriptableObject
     public bool isStackable;
     public int maxStack = 99;
     public Sprite icon;
+    public int baseValue;
 }

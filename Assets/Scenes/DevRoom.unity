@@ -231,6 +231,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &140060311 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7750705330351969906, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
+  m_PrefabInstance: {fileID: 4620381243457016400}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &236681702
 GameObject:
   m_ObjectHideFlags: 0
@@ -1426,7 +1431,7 @@ GameObject:
   - component: {fileID: 1650107632}
   - component: {fileID: 1650107631}
   - component: {fileID: 1650107630}
-  - component: {fileID: 1650107629}
+  - component: {fileID: 1650107635}
   m_Layer: 0
   m_Name: SellBox (1)
   m_TagString: Untagged
@@ -1434,21 +1439,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1650107629
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1650107628}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f2c6b31a4834454e943421047936f7f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Container
-  inventory: {fileID: 1650107630}
-  uiManager: {fileID: 951731379}
-  playerInventory: {fileID: 2136895839}
 --- !u!114 &1650107630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1509,7 +1499,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: e8c91ffdb536da546a44c73f75908966, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1556,6 +1546,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1650107635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1650107628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb3f3b83a34500d49b3881ccbbb91d67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SellBox
+  inventory: {fileID: 1650107630}
+  uiManager: {fileID: 951731379}
+  playerInventory: {fileID: 2136895839}
+  wallet: {fileID: 7455334749972273747}
 --- !u!1 &1884508710
 GameObject:
   m_ObjectHideFlags: 0
@@ -1827,7 +1833,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 559941299509951046, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
   m_PrefabInstance: {fileID: 4620381243457016400}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 140060311}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eeb26fe9498bc5f47b2c461e1cb8ff17, type: 3}
@@ -1853,6 +1859,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 7455334749972273739}
+    - target: {fileID: 1382151820736394693, guid: 169087ed26070db4ba061dbf7673a9b6, type: 3}
+      propertyPath: wallet
+      value: 
+      objectReference: {fileID: 7455334749972273747}
     - target: {fileID: 1382151820736394693, guid: 169087ed26070db4ba061dbf7673a9b6, type: 3}
       propertyPath: tileSet
       value: 
@@ -2384,6 +2394,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1638303884}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7750705330351969906, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7455334749972273747}
     - targetCorrespondingSourceObject: {fileID: 6710945996188953724, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
       insertIndex: -1
       addedObject: {fileID: 775430127}
@@ -2528,6 +2541,20 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7048348988334402295, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
   m_PrefabInstance: {fileID: 4620381243457016400}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7455334749972273747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140060311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44bbb2d71293eed428827596e2fefc39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Wallet
+  playerCash: 0
+  text: {fileID: 1907698450}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
