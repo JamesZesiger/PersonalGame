@@ -140,14 +140,16 @@ public class FarmGrid : MonoBehaviour
         // Return previous instance to pool
         if (tile.instance != null)
         {
-            ReturnToPool(tile.instance);
+            ReturnToPoolPrefab(tile.instance, tile.sourcePrefab);
             tile.instance = null;
+            tile.sourcePrefab = null;
         }
 
         // Spawn new prefab from pool
         Vector3 pos = GridToWorld(x, y);
         pos.y -= 0.1f;
         tile.instance = SpawnFromPool(visual.prefab, pos, visual.rotation, tileParent);
+        tile.sourcePrefab = visual.prefab;
     }
 
     // ================================
@@ -222,9 +224,23 @@ public class FarmGrid : MonoBehaviour
         Tile tile = tiles[x, y];
         tile.type = TileType.Empty;
         tile.active = false;
+        if (tile.crop != null)
+        {
+            CropInstance crop = tile.crop;
+            if (crop.visual != null)
+                    ReturnToPoolPrefab(tile.crop.visual, crop.sourcePrefab);
 
-        if (tile.instance != null) ReturnToPool(tile.instance);
-        if (tile.cropInstance != null) ReturnToPool(tile.cropInstance);
+            if (tile.crop.progressUI != null)
+            {
+                ReturnToPoolPrefab(crop.progressUI.gameObject, progressUIPrefab);
+                crop.progressUI = null;
+            }
+
+            tile.crop = null;
+
+        }
+        ReturnToPoolPrefab(tile.instance,tile.sourcePrefab);
+
 
         UpdateTileAndNeighbors(x, y);
     }
@@ -255,7 +271,7 @@ public class FarmGrid : MonoBehaviour
         // Return old
         if (crop.visual != null)
         {
-            ReturnToPool(crop.visual);
+            ReturnToPoolPrefab(crop.visual, crop.sourcePrefab);
             crop.visual = null;
             crop.sourcePrefab = null;
         }
@@ -474,16 +490,6 @@ public class FarmGrid : MonoBehaviour
         return newObj;
     }
 
-    void ReturnToPool(GameObject obj)
-    {
-        obj.SetActive(false);
-        if (!pool.TryGetValue(obj, out Queue<GameObject> q))
-        {
-            q = new Queue<GameObject>();
-            pool[obj] = q;
-        }
-        q.Enqueue(obj);
-    }
     void ReturnToPoolPrefab(GameObject obj, GameObject prefab)
     {
         obj.SetActive(false);
@@ -540,5 +546,27 @@ public class FarmGrid : MonoBehaviour
     {
         if (x < 0 || z < 0 || x >= width || z >= height) return null;
         return tiles[x, z];
+    }
+
+    public void WaterTile(int x, int z)
+    {
+        if (!InBounds(x, z)) return;
+
+        Tile tile = GetTile(x, z);
+        Renderer rend = tile.instance.GetComponent<Renderer>();
+        if (tile.type == TileType.Tilled)
+        {
+            tile.type = TileType.TilledWatered;
+            if (rend != null)
+                rend.material.SetColor("_Color", new Color(0.5597484f,0.4424973f,0.2974763f,1f));
+            UpdateTileAndNeighbors(x, z);
+        }
+        if (tile.type == TileType.Planted)
+        {
+            tile.type = TileType.PlantedWatered;
+            if (rend != null)
+                rend.material.SetColor("_Color", new Color(0.5597484f,0.4424973f,0.2974763f,1f));
+            UpdateTileAndNeighbors(x, z);
+        }
     }
 }

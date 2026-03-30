@@ -4,7 +4,7 @@ public class Tile
 {
     public bool active;
     public GameObject instance;
-
+    public GameObject sourcePrefab;
     public TileType type = TileType.Empty;
 
     // Crop data

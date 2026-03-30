@@ -3,5 +3,7 @@ public enum TileType
     Empty,
     Tilled,
     Planted,
-    Building
+    Building,
+    TilledWatered,
+    PlantedWatered
 }

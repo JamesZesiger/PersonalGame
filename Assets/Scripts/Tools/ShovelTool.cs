@@ -22,9 +22,9 @@ public class ShovelTool : Tool
         Vector2Int gridPos = grid.WorldToGrid(preview.transform.position);
         Tile tile = grid.GetTile(gridPos.x, gridPos.y);
 
-        if (tile != null && tile.type == TileType.Tilled)
+        if (tile != null && tile.type != TileType.Building)
         {
-            grid.UntillTile(gridPos.x, gridPos.y);
+            grid.WaterTile(gridPos.x, gridPos.y);
 
         }
     }
