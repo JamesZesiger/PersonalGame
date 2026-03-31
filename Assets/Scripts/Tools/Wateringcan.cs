@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ShovelTool : Tool
+public class Wateringcan : Tool
 {
     private FarmGrid grid;
     private GameObject preview;
@@ -10,6 +10,7 @@ public class ShovelTool : Tool
         this.preview = preview;
 
     }
+
 
     public override void Use()
     {
@@ -23,7 +24,8 @@ public class ShovelTool : Tool
 
         if (tile != null && tile.type != TileType.Building)
         {
-            grid.UntillTile(gridPos.x, gridPos.y);
+            grid.WaterTile(gridPos.x, gridPos.y);
+
         }
     }
 }

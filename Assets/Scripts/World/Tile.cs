@@ -11,4 +11,8 @@ public class Tile
     public CropInstance crop;
     public float cropTimer;
     public GameObject cropInstance;
+
+    public bool isWatered;
+    
+    public float waterTimer = 0f;
 }

@@ -9,6 +9,7 @@ public class FarmGrid : MonoBehaviour
     public int width = 50;
     public int height = 50;
     public float tileSize = 1f;
+    public float dryTime = 60f;
 
     [Header("Tile Sets (per tool)")]
     public TileSet hoeTileSet;
@@ -81,6 +82,7 @@ public class FarmGrid : MonoBehaviour
     void Update()
     {
         GrowCrops(Time.deltaTime);
+        DryTile(Time.deltaTime);
     }
 
     // ================================
@@ -133,13 +135,17 @@ public class FarmGrid : MonoBehaviour
     // ================================
     void UpdateTileVisual(int x, int y)
     {
-        int mask = GetBitmask(x, y,activeTileSet);
+        int mask = GetBitmask(x, y, activeTileSet);
         TileVisual visual = activeTileSet.GetTileVisual(mask);
         Tile tile = tiles[x, y];
 
-        // Return previous instance to pool
+        // Reset color before returning to pool so it doesn't bleed onto the next tile that reuses this object
         if (tile.instance != null)
         {
+            Renderer oldRend = tile.instance.GetComponent<Renderer>();
+            if (oldRend != null)
+                oldRend.material.color = activeTileSet.color;
+
             ReturnToPoolPrefab(tile.instance, tile.sourcePrefab);
             tile.instance = null;
             tile.sourcePrefab = null;
@@ -150,6 +156,18 @@ public class FarmGrid : MonoBehaviour
         pos.y -= 0.1f;
         tile.instance = SpawnFromPool(visual.prefab, pos, visual.rotation, tileParent);
         tile.sourcePrefab = visual.prefab;
+
+        // Re-apply watered color if this tile is watered.
+        // Instantiate a unique material so only this tile's color changes.
+        if (tile.isWatered)
+        {
+            Renderer rend = tile.instance.GetComponent<Renderer>();
+            if (rend != null)
+            {
+                rend.material = Instantiate(rend.material);
+                rend.material.color = activeTileSet.colorWet;
+            }
+        }
     }
 
     // ================================
@@ -334,6 +352,7 @@ public class FarmGrid : MonoBehaviour
             {
                 Tile tile = tiles[x, z];
                 if (tile.crop == null) continue;
+                if (!tile.isWatered) continue;
 
                 CropInstance crop = tile.crop;
 
@@ -553,20 +572,41 @@ public class FarmGrid : MonoBehaviour
         if (!InBounds(x, z)) return;
 
         Tile tile = GetTile(x, z);
-        Renderer rend = tile.instance.GetComponent<Renderer>();
-        if (tile.type == TileType.Tilled)
+
+        if (tile.type != TileType.Tilled && tile.type != TileType.Planted) return;
+
+        tile.isWatered = true;
+
+        Renderer renderer = tile.instance.GetComponent<Renderer>();
+        Debug.Log(renderer);
+        renderer.material = Instantiate(renderer.material);
+
+
+        renderer.material.color = activeTileSet.colorWet;
+
+    }
+
+    void DryTile(float deltaTime)
+    {
+       for (int x = 0; x < width; x++)
         {
-            tile.type = TileType.TilledWatered;
-            if (rend != null)
-                rend.material.SetColor("_Color", new Color(0.5597484f,0.4424973f,0.2974763f,1f));
-            UpdateTileAndNeighbors(x, z);
-        }
-        if (tile.type == TileType.Planted)
-        {
-            tile.type = TileType.PlantedWatered;
-            if (rend != null)
-                rend.material.SetColor("_Color", new Color(0.5597484f,0.4424973f,0.2974763f,1f));
-            UpdateTileAndNeighbors(x, z);
-        }
+            for (int z = 0; z < height; z++)
+            {
+                Tile tile = tiles[x, z];
+                if (!tile.isWatered) continue;
+
+                tile.waterTimer += deltaTime;
+
+                float t = 0f;
+
+                t = tile.waterTimer / dryTime;
+                if (tile.waterTimer >= dryTime)
+                {
+                    tile.waterTimer = 0f;
+                    tile.isWatered = false;
+                    UpdateTileVisual(x,z);
+                }
+            }
+        } 
     }
 }

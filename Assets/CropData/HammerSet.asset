@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fc67de8c1238924aa3afc350a6efbcd, type: 3}
+  m_Name: HammerSet
+  m_EditorClassIdentifier: Assembly-CSharp::TileSet
+  Default: {fileID: 7237021027203891246, guid: f1a828605f2ad4d44be8a7d4a1479190, type: 3}
+  Cap: {fileID: 0}
+  Tunnel: {fileID: 0}
+  Corner: {fileID: 0}
+  InnerCorner: {fileID: 0}
+  L: {fileID: 0}
+  T: {fileID: 0}
+  Flat: {fileID: 0}
+  TranstionMid: {fileID: 0}
+  Intersection: {fileID: 0}
+  Edge: {fileID: 0}
+  TransitionL: {fileID: 0}
+  TransitionR: {fileID: 0}
+  TransitionTwo: {fileID: 0}
+  SquareConnection: {fileID: 0}
+  type: 03000000
+  color: {r: 0, g: 0, b: 0, a: 0}
+  colorWet: {r: 0, g: 0, b: 0, a: 0}
+  x_rotation: -90

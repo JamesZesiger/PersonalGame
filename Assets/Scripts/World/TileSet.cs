@@ -20,6 +20,10 @@ public class TileSet : ScriptableObject
     public GameObject SquareConnection;
     public TileType[] type ;
 
+    public Color color;
+    public Color colorWet;
+
+
     public int x_rotation = -90;
     private Dictionary<int, TileVisual> tileLookup;
 

@@ -79,3 +79,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShovelTool
   toolName: Shovel
   sprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  wt: {fileID: 2100000, guid: c4511d60a38e3054fabcb6187652c282, type: 2}

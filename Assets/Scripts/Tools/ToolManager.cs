@@ -58,6 +58,13 @@ public class ToolManager : MonoBehaviour
         currentToolInstance = Instantiate(toolPrefabs[index], toolHolder);
 
         currentToolInstance.Initialize(cam, grid, preview);
+
+        if(currentToolInstance.toolType == ToolType.Hoe || currentToolInstance.toolType == ToolType.Hammer)
+        {
+            Debug.Log("tool change");
+            grid.SetTool(currentToolInstance.toolType);
+        }
+
     }
 
     public void NextTool()

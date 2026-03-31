@@ -28,4 +28,6 @@ MonoBehaviour:
   TransitionTwo: {fileID: 8632131685083010745, guid: 062b3ab1946c6e54fba1abcfb634888c, type: 3}
   SquareConnection: {fileID: 3404354779297303702, guid: 503ffad2168f23b439d040881d45dd45, type: 3}
   type: 0100000002000000
+  color: {r: 0.98039216, g: 0.78431374, b: 0.5411765, a: 0}
+  colorWet: {r: 0.62352943, g: 0.45882353, b: 0.25490198, a: 0}
   x_rotation: -90
