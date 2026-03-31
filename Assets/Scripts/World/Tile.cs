@@ -15,4 +15,6 @@ public class Tile
     public bool isWatered;
     
     public float waterTimer = 0f;
+
+    public TileSet tileSet;
 }

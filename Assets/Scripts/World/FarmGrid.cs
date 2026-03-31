@@ -135,39 +135,79 @@ public class FarmGrid : MonoBehaviour
     // ================================
     void UpdateTileVisual(int x, int y)
     {
-        int mask = GetBitmask(x, y, activeTileSet);
-        TileVisual visual = activeTileSet.GetTileVisual(mask);
         Tile tile = tiles[x, y];
-
-        // Reset color before returning to pool so it doesn't bleed onto the next tile that reuses this object
-        if (tile.instance != null)
+        Debug.Log(tile.tileSet);
+        if(tile.tileSet == null)
         {
-            Renderer oldRend = tile.instance.GetComponent<Renderer>();
-            if (oldRend != null)
-                oldRend.material.color = activeTileSet.color;
-
-            ReturnToPoolPrefab(tile.instance, tile.sourcePrefab);
-            tile.instance = null;
-            tile.sourcePrefab = null;
-        }
-
-        // Spawn new prefab from pool
-        Vector3 pos = GridToWorld(x, y);
-        pos.y -= 0.1f;
-        tile.instance = SpawnFromPool(visual.prefab, pos, visual.rotation, tileParent);
-        tile.sourcePrefab = visual.prefab;
-
-        // Re-apply watered color if this tile is watered.
-        // Instantiate a unique material so only this tile's color changes.
-        if (tile.isWatered)
-        {
-            Renderer rend = tile.instance.GetComponent<Renderer>();
-            if (rend != null)
+            int mask = GetBitmask(x, y, activeTileSet);
+            TileVisual visual = activeTileSet.GetTileVisual(mask);
+            if (tile.instance != null)
             {
-                rend.material = Instantiate(rend.material);
-                rend.material.color = activeTileSet.colorWet;
+                Renderer oldRend = tile.instance.GetComponent<Renderer>();
+                if (oldRend != null)
+                    oldRend.material.color = activeTileSet.color;
+
+                ReturnToPoolPrefab(tile.instance, tile.sourcePrefab);
+                tile.instance = null;
+                tile.sourcePrefab = null;
+            }
+
+            // Spawn new prefab from pool
+            Vector3 pos = GridToWorld(x, y);
+            pos.y -= 0.1f;
+            tile.instance = SpawnFromPool(visual.prefab, pos, visual.rotation, tileParent);
+            tile.sourcePrefab = visual.prefab;
+            tile.tileSet = activeTileSet;
+
+            // Re-apply watered color if this tile is watered.
+            // Instantiate a unique material so only this tile's color changes.
+            if (tile.isWatered)
+            {
+                Renderer rend = tile.instance.GetComponent<Renderer>();
+                if (rend != null)
+                {
+                    rend.material = Instantiate(rend.material);
+                    rend.material.color = activeTileSet.colorWet;
+                }
             }
         }
+        else
+        {
+            int mask = GetBitmask(x, y, tile.tileSet);
+            TileVisual visual = tile.tileSet.GetTileVisual(mask);
+            if (tile.instance != null)
+            {
+                Renderer oldRend = tile.instance.GetComponent<Renderer>();
+                if (oldRend != null)
+                    oldRend.material.color = tile.tileSet.color;
+
+                ReturnToPoolPrefab(tile.instance, tile.sourcePrefab);
+                tile.instance = null;
+                tile.sourcePrefab = null;
+            }
+
+            // Spawn new prefab from pool
+            Vector3 pos = GridToWorld(x, y);
+            pos.y -= 0.1f;
+            tile.instance = SpawnFromPool(visual.prefab, pos, visual.rotation, tileParent);
+            tile.sourcePrefab = visual.prefab;
+
+            // Re-apply watered color if this tile is watered.
+            // Instantiate a unique material so only this tile's color changes.
+            if (tile.isWatered)
+            {
+                Renderer rend = tile.instance.GetComponent<Renderer>();
+                if (rend != null)
+                {
+                    rend.material = Instantiate(rend.material);
+                    rend.material.color = activeTileSet.colorWet;
+                }
+            }
+        }
+
+
+        // Reset color before returning to pool so it doesn't bleed onto the next tile that reuses this object
+
     }
 
     // ================================
