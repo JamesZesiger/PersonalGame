@@ -26,4 +26,6 @@ public class ShovelTool : Tool
             grid.UntillTile(gridPos.x, gridPos.y);
         }
     }
+
+    protected override void AltUse(){}
 }

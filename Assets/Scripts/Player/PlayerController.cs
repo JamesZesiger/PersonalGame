@@ -197,4 +197,10 @@ public class PlayerController : MonoBehaviour
 
         uiManager.TogglePlayerInventory(playerInventory);
     }
+
+    void OnAltUseTool(InputValue value)
+    {
+        if (value.isPressed)
+            toolManager.AltUse();
+    }
 }

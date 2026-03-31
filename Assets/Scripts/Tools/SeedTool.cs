@@ -19,4 +19,5 @@ public class SeedTool : Tool
 
         grid.PlantCrop(pos.x, pos.y, cropToPlant);
     }
+    protected override void AltUse(){}
 }

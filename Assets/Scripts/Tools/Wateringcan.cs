@@ -28,4 +28,5 @@ public class Wateringcan : Tool
 
         }
     }
+    protected override void AltUse(){}
 }

@@ -18,4 +18,5 @@ public class Hands : Tool
     {
         
     }
+    protected override void AltUse(){}
 }

@@ -81,4 +81,9 @@ public class ToolManager : MonoBehaviour
         selectionUI.setIcon(toolPrefabs[prevIndex].sprite);
         EquipTool(prevIndex);
     }
+
+    public void AltUse()
+    {
+        currentToolInstance?.TryAlt();
+    }
 }

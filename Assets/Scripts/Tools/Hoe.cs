@@ -19,4 +19,5 @@ public class HoeTool : Tool
         Vector2Int gridPos = grid.WorldToGrid(preview.transform.position);
         grid.SetTileType(gridPos.x, gridPos.y, TileType.Tilled);
     }
+    protected override void AltUse(){}
 }
