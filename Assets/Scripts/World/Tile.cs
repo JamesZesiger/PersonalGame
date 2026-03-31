@@ -17,6 +17,7 @@ public class Tile
     public float waterTimer = 0f;
 
     public TileSet tileSet;
+    public StructureSet structureSet;
 
     public int structureIndex = 0;
 }

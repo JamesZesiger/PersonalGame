@@ -2043,7 +2043,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2113572885425662817, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 2113572885425662817, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2213,6 +2213,10 @@ PrefabInstance:
       propertyPath: uiManager
       value: 
       objectReference: {fileID: 951731379}
+    - target: {fileID: 5372307198803074151, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
+      propertyPath: rotationSpeed
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5372307198803074151, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
       propertyPath: playerInventory
       value: 
