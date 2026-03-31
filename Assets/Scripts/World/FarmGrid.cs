@@ -250,13 +250,17 @@ public class FarmGrid : MonoBehaviour
     // ================================
     // TILE TYPE MODIFIERS
     // ================================
-    public void SetTileType(int x, int y, TileType type)
+    public void SetTileType(int x, int y, TileType type, int index = 0)
     {
         if (!InBounds(x, y)) return;
 
         Tile tile = GetTile(x, y);
         tile.type = type;
         tile.active = type != TileType.Empty;
+        if (index != 0)
+        {
+            tile.structureIndex = index;
+        }
         UpdateTileAndNeighbors(x, y);
     }
 

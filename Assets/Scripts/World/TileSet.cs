@@ -142,7 +142,7 @@ public class TileSet : ScriptableObject
 
         return new TileVisual(Default, Quaternion.Euler(x_rotation, 0, 0)); // fallback
     }
-        public GameObject[] GetAllPrefabs()
+    public GameObject[] GetAllPrefabs()
     {
         return new GameObject[]
         {

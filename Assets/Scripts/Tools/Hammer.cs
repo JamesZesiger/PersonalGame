@@ -17,6 +17,6 @@ public class Hammer : Tool
     public override void Use()
     {
         Vector2Int gridPos = grid.WorldToGrid(preview.transform.position);
-        grid.SetTileType(gridPos.x, gridPos.y, TileType.Building);
+        grid.SetTileType(gridPos.x, gridPos.y, TileType.Building, 1);
     }
 }
