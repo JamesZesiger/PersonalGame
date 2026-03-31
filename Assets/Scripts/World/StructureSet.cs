@@ -19,10 +19,11 @@ public class StructureSet : ScriptableObject
         }
     }
 
-    public TileVisual GetStructureVisual(int index)
+    public TileVisual GetStructureVisual(int? index)
     {
-        if (tileLookup.TryGetValue(index, out var visual))
-            return visual;
+        if (index != null)
+            if (tileLookup.TryGetValue(index??0, out var visual))
+                return visual;
 
         return new TileVisual(Structures[0], Quaternion.Euler(x_rotation, 0, 0)); // fallback
     }

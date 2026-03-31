@@ -146,144 +146,71 @@ public class FarmGrid : MonoBehaviour
     void UpdateTileVisual(int x, int y)
     {
         Tile tile = tiles[x, y];
-        if(tile.tileSet == null && tile.structureSet == null)
+        if(tile.type == TileType.Empty) return;
+        if (tile.type!= TileType.Building)
         {
-            if (currentTool == ToolType.Hoe)
+            int mask = GetBitmask(x, y, tile.tileSet);
+            TileVisual visual = tile.tileSet.GetTileVisual(mask);
+            if (tile.instance != null)
             {
-                int mask = GetBitmask(x, y, activeTileSet);
-                TileVisual visual = activeTileSet.GetTileVisual(mask);
-                if (tile.instance != null)
-                {
-                    Renderer oldRend = tile.instance.GetComponent<Renderer>();
-                    if (oldRend != null)
-                        oldRend.material.color = activeTileSet.color;
+                Renderer oldRend = tile.instance.GetComponent<Renderer>();
+                if (oldRend != null)
+                    oldRend.material.color = tile.tileSet.color;
 
-                    ReturnToPoolPrefab(tile.instance, tile.sourcePrefab);
-                    tile.instance = null;
-                    tile.sourcePrefab = null;
-                }
-
-                // Spawn new prefab from pool
-                Vector3 pos = GridToWorld(x, y);
-                pos.y -= 0.1f;
-                tile.instance = SpawnFromPool(visual.prefab, pos, visual.rotation, tileParent);
-                tile.sourcePrefab = visual.prefab;
-                tile.tileSet = activeTileSet;
-
-                // Re-apply watered color if this tile is watered.
-                // Instantiate a unique material so only this tile's color changes.
-                if (tile.isWatered)
-                {
-                    Renderer rend = tile.instance.GetComponent<Renderer>();
-                    if (rend != null)
-                    {
-                        rend.material = Instantiate(rend.material);
-                        rend.material.color = activeTileSet.colorWet;
-                    }
-                }
+                ReturnToPoolPrefab(tile.instance, tile.sourcePrefab);
+                tile.instance = null;
+                tile.sourcePrefab = null;
             }
-            if (currentTool == ToolType.Hammer)
+
+            // Spawn new prefab from pool
+            Vector3 pos = GridToWorld(x, y);
+            pos.y -= 0.1f;
+            tile.instance = SpawnFromPool(visual.prefab, pos, visual.rotation, tileParent);
+            tile.sourcePrefab = visual.prefab;
+            //tile.tileSet = activeTileSet;
+
+            // Re-apply watered color if this tile is watered.
+            // Instantiate a unique material so only this tile's color changes.
+            if (tile.isWatered)
             {
-                TileVisual visual = activeStructureSet.GetStructureVisual(tile.structureIndex);
-                if (tile.instance != null)
+                Renderer rend = tile.instance.GetComponent<Renderer>();
+                if (rend != null)
                 {
-                    Renderer oldRend = tile.instance.GetComponent<Renderer>();
-                    if (oldRend != null)
-                        oldRend.material.color = activeTileSet.color;
-
-                    ReturnToPoolPrefab(tile.instance, tile.sourcePrefab);
-                    tile.instance = null;
-                    tile.sourcePrefab = null;
-                }
-
-                // Spawn new prefab from pool
-                Vector3 pos = GridToWorld(x, y);
-                pos.y -= 0.1f;
-                tile.instance = SpawnFromPool(visual.prefab, pos, visual.rotation, tileParent);
-                tile.sourcePrefab = visual.prefab;
-                tile.structureSet = activeStructureSet;
-
-                // Re-apply watered color if this tile is watered.
-                // Instantiate a unique material so only this tile's color changes.
-                if (tile.isWatered)
-                {
-                    Renderer rend = tile.instance.GetComponent<Renderer>();
-                    if (rend != null)
-                    {
-                        rend.material = Instantiate(rend.material);
-                        rend.material.color = activeTileSet.colorWet;
-                    }
+                    rend.material = Instantiate(rend.material);
+                    rend.material.color = activeTileSet.colorWet;
                 }
             }
         }
-        else
+        if (tile.type == TileType.Building)
         {
-            if (tile.tileSet != null)
+            TileVisual visual = tile.structureSet.GetStructureVisual(tile.structureIndex);
+            if (tile.instance != null)
             {
-                int mask = GetBitmask(x, y, tile.tileSet);
-                TileVisual visual = tile.tileSet.GetTileVisual(mask);
-                if (tile.instance != null)
-                {
-                    Renderer oldRend = tile.instance.GetComponent<Renderer>();
-                    if (oldRend != null)
-                        oldRend.material.color = tile.tileSet.color;
 
-                    ReturnToPoolPrefab(tile.instance, tile.sourcePrefab);
-                    tile.instance = null;
-                    tile.sourcePrefab = null;
-                }
-
-                // Spawn new prefab from pool
-                Vector3 pos = GridToWorld(x, y);
-                pos.y -= 0.1f;
-                tile.instance = SpawnFromPool(visual.prefab, pos, visual.rotation, tileParent);
-                tile.sourcePrefab = visual.prefab;
-
-                // Re-apply watered color if this tile is watered.
-                // Instantiate a unique material so only this tile's color changes.
-                if (tile.isWatered)
-                {
-                    Renderer rend = tile.instance.GetComponent<Renderer>();
-                    if (rend != null)
-                    {
-                        rend.material = Instantiate(rend.material);
-                        rend.material.color = activeTileSet.colorWet;
-                    }
-                }
+                ReturnToPoolPrefab(tile.instance, tile.sourcePrefab);
+                tile.instance = null;
+                tile.sourcePrefab = null;
             }
-            if (tile.structureSet != null)
+
+            // Spawn new prefab from pool
+            Vector3 pos = GridToWorld(x, y);
+            pos.y -= 0.1f;
+            tile.instance = SpawnFromPool(visual.prefab, pos, visual.rotation, tileParent);
+            tile.sourcePrefab = visual.prefab;
+            //tile.structureSet = activeStructureSet;
+
+            // Re-apply watered color if this tile is watered.
+            // Instantiate a unique material so only this tile's color changes.
+            if (tile.isWatered)
             {
-                TileVisual visual = tile.structureSet.GetStructureVisual(tile.structureIndex);
-                if (tile.instance != null)
+                Renderer rend = tile.instance.GetComponent<Renderer>();
+                if (rend != null)
                 {
-
-                    ReturnToPoolPrefab(tile.instance, tile.sourcePrefab);
-                    tile.instance = null;
-                    tile.sourcePrefab = null;
-                }
-
-                // Spawn new prefab from pool
-                Vector3 pos = GridToWorld(x, y);
-                pos.y -= 0.1f;
-                tile.instance = SpawnFromPool(visual.prefab, pos, visual.rotation, tileParent);
-                tile.sourcePrefab = visual.prefab;
-
-                // Re-apply watered color if this tile is watered.
-                // Instantiate a unique material so only this tile's color changes.
-                if (tile.isWatered)
-                {
-                    Renderer rend = tile.instance.GetComponent<Renderer>();
-                    if (rend != null)
-                    {
-                        rend.material = Instantiate(rend.material);
-                        rend.material.color = activeTileSet.colorWet;
-                    }
+                    rend.material = Instantiate(rend.material);
+                    rend.material.color = activeTileSet.colorWet;
                 }
             }
         }
-
-
-        // Reset color before returning to pool so it doesn't bleed onto the next tile that reuses this object
 
     }
 
@@ -327,17 +254,23 @@ public class FarmGrid : MonoBehaviour
     // ================================
     // TILE TYPE MODIFIERS
     // ================================
-    public void SetTileType(int x, int y, TileType type, int index = 0)
+    public void SetTileType(int x, int y, TileType type, int? index = null)
     {
         if (!InBounds(x, y)) return;
 
         Tile tile = GetTile(x, y);
+        if (tile.type != TileType.Empty) return;
         tile.type = type;
         tile.active = type != TileType.Empty;
-        if (index != 0)
+
+        if(index != null)
         {
             tile.structureIndex = index;
+            tile.structureSet = activeStructureSet;
         }
+        else
+            tile.tileSet = activeTileSet;
+        
         UpdateTileAndNeighbors(x, y);
     }
 
@@ -361,6 +294,7 @@ public class FarmGrid : MonoBehaviour
         if (!InBounds(x, y)) return;
 
         Tile tile = tiles[x, y];
+        if (tile.type == TileType.Empty) return;
         tile.type = TileType.Empty;
         tile.active = false;
         if (tile.crop != null)

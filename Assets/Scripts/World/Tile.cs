@@ -19,5 +19,5 @@ public class Tile
     public TileSet tileSet;
     public StructureSet structureSet;
 
-    public int structureIndex = 0;
+    public int? structureIndex = 0;
 }
