@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 public class PlayerCamera : MonoBehaviour
 {
+    public static PlayerCamera Instance { get; private set; }
     [Header("References")]
     [SerializeField] Transform cameraPivot;
     
@@ -11,6 +12,7 @@ public class PlayerCamera : MonoBehaviour
     float cameraXRotation;
     public Camera cam;
     Vector2 lookInput;
+    private bool isCameraLocked = false;
 
 
     void Awake()
@@ -20,6 +22,9 @@ public class PlayerCamera : MonoBehaviour
         Cursor.visible = false;
 
         cam = Camera.main;
+
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+        Instance = this;
     }
 
     void Update()
@@ -31,6 +36,7 @@ public class PlayerCamera : MonoBehaviour
 
     void HandleLook()
     {
+        if (isCameraLocked) return;
         float mouseX = lookInput.x * mouseSensitivity;
         float mouseY = lookInput.y * mouseSensitivity;
 
@@ -48,6 +54,11 @@ public class PlayerCamera : MonoBehaviour
     void OnLook(InputValue value)
     {
         lookInput = value.Get<Vector2>();
+    }
+
+    public void ToggleCameraLock(bool lockState)
+    {
+        isCameraLocked = lockState;
     }
 
 }

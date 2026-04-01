@@ -39,6 +39,7 @@ public class Hammer : Tool
 
     protected override void AltUse()
     {
+        PlayerCamera.Instance.ToggleCameraLock(!IsOpen);
         if (IsOpen)
         {
            hammerUI.gameObject.SetActive(false); 
@@ -57,8 +58,16 @@ public class Hammer : Tool
     public override void Use()
     {
         if (IsOpen) return;
-        Debug.Log(hammerUI.selectedIndex);
-        Vector2Int gridPos = grid.WorldToGrid(preview.transform.position);
-        grid.SetTileType(gridPos.x, gridPos.y, TileType.Building, hammerUI.selectedIndex+1);
+
+        if(hammerUI.selectedIndex == 0)
+        {
+            Vector2Int gridPos = grid.WorldToGrid(preview.transform.position);
+            grid.RemoveStructure(gridPos.x, gridPos.y);
+        }
+        else
+        {
+            Vector2Int gridPos = grid.WorldToGrid(preview.transform.position);
+            grid.SetTileType(gridPos.x, gridPos.y, TileType.Building, hammerUI.selectedIndex);
+        }
     }
 }

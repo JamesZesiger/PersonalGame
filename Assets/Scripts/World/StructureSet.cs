@@ -15,7 +15,7 @@ public class StructureSet : ScriptableObject
         tileLookup = new Dictionary<int, TileVisual>();
         for (int i = 0; i < Structures.Count; i++)
         {
-            tileLookup.Add(i+1, new TileVisual(Structures[i], Quaternion.Euler(x_rotation, 0, 0))); 
+            tileLookup.Add(i, new TileVisual(Structures[i], Quaternion.Euler(x_rotation, 0, 0))); 
         }
     }
 
@@ -25,7 +25,7 @@ public class StructureSet : ScriptableObject
             if (tileLookup.TryGetValue(index??0, out var visual))
                 return visual;
 
-        return new TileVisual(Structures[0], Quaternion.Euler(x_rotation, 0, 0)); // fallback
+        return new TileVisual(Structures[1], Quaternion.Euler(x_rotation, 0, 0)); // fallback
     }
     public GameObject[] GetAllPrefabs()
     {

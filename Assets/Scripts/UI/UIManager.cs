@@ -80,6 +80,8 @@ public class UIManager : MonoBehaviour
     {
         Cursor.lockState = state ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = state;
+        PlayerCamera.Instance.ToggleCameraLock(state);
+
     }
 
     public Inventory GetOtherInventory(Inventory source)
