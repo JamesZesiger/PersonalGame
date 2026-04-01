@@ -46,7 +46,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SeedTool
   toolName: Corn
-  sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  sprite: {fileID: 21300000, guid: 770405e5285bbed429bf922203262594, type: 3}
+  toolType: 0
   cropToPlant: {fileID: 11400000, guid: 687e6629a46cb67449e62bd8a402f315, type: 2}
 --- !u!1 &3297693493389563985
 GameObject:

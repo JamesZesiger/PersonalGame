@@ -513,6 +513,17 @@
                     "action": "AltUseTool",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0a2020d1-5524-46ab-8311-ab48bc63f0d4",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "AltUseTool",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },

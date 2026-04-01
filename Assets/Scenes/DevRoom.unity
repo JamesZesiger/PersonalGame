@@ -763,6 +763,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5019869673918854660, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
   m_PrefabInstance: {fileID: 4620381243457016400}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &860623802 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4346720312249635027, guid: 959fe4baacdb66a4985c991beabeca2b, type: 3}
+  m_PrefabInstance: {fileID: 4976987096667438791}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &874465521
 GameObject:
   m_ObjectHideFlags: 0
@@ -1865,7 +1870,7 @@ PrefabInstance:
       objectReference: {fileID: 7455334749972273747}
     - target: {fileID: 1382151820736394693, guid: 169087ed26070db4ba061dbf7673a9b6, type: 3}
       propertyPath: dryTime
-      value: 3
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 1382151820736394693, guid: 169087ed26070db4ba061dbf7673a9b6, type: 3}
       propertyPath: tileSet
@@ -1883,6 +1888,10 @@ PrefabInstance:
       propertyPath: hoeTileSet
       value: 
       objectReference: {fileID: 11400000, guid: 95ec5663a9c30eb43bcdfbad6c62a8e6, type: 2}
+    - target: {fileID: 1382151820736394693, guid: 169087ed26070db4ba061dbf7673a9b6, type: 3}
+      propertyPath: tileParent
+      value: 
+      objectReference: {fileID: 860623802}
     - target: {fileID: 1382151820736394693, guid: 169087ed26070db4ba061dbf7673a9b6, type: 3}
       propertyPath: inventoryUI
       value: 
@@ -2079,7 +2088,7 @@ PrefabInstance:
       objectReference: {fileID: 445412218}
     - target: {fileID: 2299427154192918428, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
       propertyPath: toolPrefabs.Array.size
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 2299427154192918428, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
       propertyPath: 'toolPrefabs.Array.data[4]'
@@ -2093,6 +2102,10 @@ PrefabInstance:
       propertyPath: 'toolPrefabs.Array.data[6]'
       value: 
       objectReference: {fileID: 5374165551689763522, guid: 8de27c3adf1402842868bed194d644bd, type: 3}
+    - target: {fileID: 2299427154192918428, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
+      propertyPath: 'toolPrefabs.Array.data[7]'
+      value: 
+      objectReference: {fileID: 6536107753462126578, guid: 0733b163fb9eb3548a45e4fbfcee9cf5, type: 3}
     - target: {fileID: 2445185318696717835, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
       propertyPath: m_Layer
       value: 7

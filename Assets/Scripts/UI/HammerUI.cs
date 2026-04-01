@@ -28,6 +28,11 @@ public class HammerUI : MonoBehaviour
             var slotUI = slot.GetComponent<HammerSlotUI>();
             slotUI.parentUI = this;
             slotUI.index = i;
+            Sprite? sprite = structureSet.GetStructureSprite(i);
+            if (sprite != null)
+            {
+                slotUI.icon.sprite = sprite;
+            }
             slots[i] = slot;
         }
 

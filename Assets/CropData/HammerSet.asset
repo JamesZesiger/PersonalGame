@@ -17,4 +17,8 @@ MonoBehaviour:
   - {fileID: 7237021027203891246, guid: f1a828605f2ad4d44be8a7d4a1479190, type: 3}
   - {fileID: 419954988034664439, guid: bc5941b2fb0aa214ea1f59a61f962ab3, type: 3}
   - {fileID: 8579614260903587056, guid: ebb0edb0a09e98c4fad2e4dad19e6e22, type: 3}
+  Sprites:
+  - {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   x_rotation: -90
