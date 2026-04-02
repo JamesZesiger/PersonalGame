@@ -17,7 +17,9 @@ public class SeedTool : Tool
     {
         Vector2Int pos = grid.WorldToGrid(preview.transform.position);
 
-        grid.PlantCrop(pos.x, pos.y, cropToPlant);
+        bool sucsess = grid.PlantCrop(pos.x, pos.y, cropToPlant);
+        if (isConsumable && sucsess) numUses -= 1;
+        Debug.Log(numUses);
     }
     protected override void AltUse(){}
 }

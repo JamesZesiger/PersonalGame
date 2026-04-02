@@ -315,17 +315,18 @@ public class FarmGrid : MonoBehaviour
     // ================================
     // CROP SYSTEM
     // ================================
-    public void PlantCrop(int x, int z, CropData cropData)
+    public bool PlantCrop(int x, int z, CropData cropData)
     {
         Tile tile = GetTile(x, z);
 
         if (tile == null || tile.type !=TileType.Tilled || tile.crop != null)
-            return;
+            return false;
 
         CropInstance crop = new CropInstance(cropData);
         tile.crop = crop;
         tile.type = TileType.Planted;
         SpawnCropVisual(x, z);
+        return true;
     }
 
     void SpawnCropVisual(int x, int z)

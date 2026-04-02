@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,8 +11,8 @@ public class ToolManager : MonoBehaviour
     public ItemSelectionUI selectionUI;
 
     [Header("Tool Setup")]
-    public Tool[] toolPrefabs;   // PREFABS, not scene objects
-    public Transform toolHolder; // where the tool spawns (hand)
+    public List<Tool> toolPrefabs = new List<Tool>();
+    public Transform toolHolder;
     public TilePreview tilePreviewScript;
 
     private Tool currentToolInstance;
@@ -26,50 +27,46 @@ public class ToolManager : MonoBehaviour
     {
         float scroll = Mouse.current.scroll.ReadValue().y;
         if (scroll > 0)
-        {
             NextTool();
-        }   
-
         else if (scroll < 0)
-        {
             PreviousTool();
-        }
     }
 
     public void OnUse()
     {
         if (tilePreviewScript.isEnabled)
+        {
             currentToolInstance?.Use();
-        
+            Debug.Log("use");
+            if (currentToolInstance.numUses < 1)
+            {
+                Debug.Log("removed");
+                RemoveTool(currentToolIndex);
+                EquipTool(0);
+            }
+        }
     }
 
     void EquipTool(int index)
     {
-
         currentToolIndex = index;
 
-        // Destroy old tool
         if (currentToolInstance != null)
-        {
             Destroy(currentToolInstance.gameObject);
-        }
-        
-        // Spawn new tool
-        currentToolInstance = Instantiate(toolPrefabs[index], toolHolder);
 
+        currentToolInstance = Instantiate(toolPrefabs[index], toolHolder);
         currentToolInstance.Initialize(cam, grid, preview);
 
-        if(currentToolInstance.toolType == ToolType.Hoe || currentToolInstance.toolType == ToolType.Hammer)
+        if (currentToolInstance.toolType == ToolType.Hoe || currentToolInstance.toolType == ToolType.Hammer)
         {
             Debug.Log("tool change");
             grid.SetTool(currentToolInstance.toolType);
         }
-
     }
 
     public void NextTool()
     {
-        int nextIndex = (currentToolIndex + 1) % toolPrefabs.Length;
+        int nextIndex = (currentToolIndex + 1) % toolPrefabs.Count;
         selectionUI.setIcon(toolPrefabs[nextIndex].sprite);
         EquipTool(nextIndex);
     }
@@ -77,7 +74,7 @@ public class ToolManager : MonoBehaviour
     void PreviousTool()
     {
         int prevIndex = currentToolIndex - 1;
-        if (prevIndex < 0) prevIndex = toolPrefabs.Length - 1;
+        if (prevIndex < 0) prevIndex = toolPrefabs.Count - 1;
         selectionUI.setIcon(toolPrefabs[prevIndex].sprite);
         EquipTool(prevIndex);
     }
@@ -85,5 +82,15 @@ public class ToolManager : MonoBehaviour
     public void AltUse()
     {
         currentToolInstance?.TryAlt();
+    }
+
+    public void AddTool(Tool tool)
+    {
+        toolPrefabs.Add(tool);
+    }
+
+    public void RemoveTool(int index)
+    {
+        toolPrefabs.RemoveAt(index);
     }
 }
