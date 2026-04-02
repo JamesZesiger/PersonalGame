@@ -1,35 +1,48 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+
 public class PlayerCamera : MonoBehaviour
 {
     public static PlayerCamera Instance { get; private set; }
+
     [Header("References")]
     [SerializeField] Transform cameraPivot;
-    
+
     [Header("Mouse Look")]
     [SerializeField] float mouseSensitivity = 0.12f;
     [SerializeField] float verticalClamp = 80f;
+    [SerializeField] float smoothSpeed = 5f; // rotation smoothing speed
+
     float cameraXRotation;
     public Camera cam;
     Vector2 lookInput;
-    private bool isCameraLocked = false;
 
+    public bool lockOveride = false;
+    private bool isCameraLocked;
+
+    private Quaternion targetRotation; // smooth rotation target
 
     void Awake()
     {
+        isCameraLocked = lockOveride;
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+
 
         cam = Camera.main;
 
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
+
+        targetRotation = cameraPivot.localRotation;
     }
 
     void Update()
     {
         HandleLook();
+        SmoothRotate();
     }
 
     float yaw; // horizontal rotation
@@ -37,6 +50,7 @@ public class PlayerCamera : MonoBehaviour
     void HandleLook()
     {
         if (isCameraLocked) return;
+
         float mouseX = lookInput.x * mouseSensitivity;
         float mouseY = lookInput.y * mouseSensitivity;
 
@@ -49,6 +63,19 @@ public class PlayerCamera : MonoBehaviour
 
         // Apply rotations
         cameraPivot.localRotation = Quaternion.Euler(cameraXRotation, yaw, 0);
+        targetRotation = cameraPivot.localRotation; // update target so smooth rotation doesn't fight mouse
+    }
+
+    void SmoothRotate()
+    {
+        if (cameraPivot.localRotation != targetRotation)
+        {
+            cameraPivot.localRotation = Quaternion.RotateTowards(
+                cameraPivot.localRotation,
+                targetRotation,
+                smoothSpeed * 100f * Time.deltaTime
+            );
+        }
     }
 
     void OnLook(InputValue value)
@@ -58,7 +85,21 @@ public class PlayerCamera : MonoBehaviour
 
     public void ToggleCameraLock(bool lockState)
     {
+        if (lockOveride) return;
         isCameraLocked = lockState;
     }
 
+    public void OnCameraRight(InputValue value)
+    {
+        if (!lockOveride) return;
+
+        targetRotation *= Quaternion.Euler(0, 90f, 0); // rotate 90° right smoothly
+    }
+
+    public void OnCameraLeft(InputValue value)
+    {
+        if (!lockOveride) return;
+
+        targetRotation *= Quaternion.Euler(0, -90f, 0); // rotate 90° left smoothly
+    }
 }

@@ -203,4 +203,20 @@ public class PlayerController : MonoBehaviour
         if (value.isPressed)
             toolManager.AltUse();
     }
+    void OnAlt(InputValue value)
+    {
+        if (!Cursor.visible)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false; 
+        }
+        
+
+
+    }
 }

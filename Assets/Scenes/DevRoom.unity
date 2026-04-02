@@ -2591,8 +2591,16 @@ PrefabInstance:
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 1721150019356223569, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
+      propertyPath: lockOveride
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1721150019356223569, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
       propertyPath: verticalClamp
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1721150019356223569, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
+      propertyPath: isCameraLocked
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1836066136353553177, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
       propertyPath: m_Layer
@@ -2785,6 +2793,10 @@ PrefabInstance:
     - target: {fileID: 5066055407847944532, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5372307198803074151, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
+      propertyPath: gridMove
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5372307198803074151, guid: daf3266179e7fc240914e39a72b0b443, type: 3}
       propertyPath: uiManager
@@ -3156,6 +3168,18 @@ PrefabInstance:
       propertyPath: farmGrid
       value: 
       objectReference: {fileID: 1470171931}
+    - target: {fileID: 4514631147278981389, guid: de9ff43e8ff0c79489c0ec6cadeb11d4, type: 3}
+      propertyPath: isEnabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4514631147278981389, guid: de9ff43e8ff0c79489c0ec6cadeb11d4, type: 3}
+      propertyPath: mainCamera
+      value: 
+      objectReference: {fileID: 717329018875298903}
+    - target: {fileID: 4514631147278981389, guid: de9ff43e8ff0c79489c0ec6cadeb11d4, type: 3}
+      propertyPath: useMousePosition
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4514631147278981389, guid: de9ff43e8ff0c79489c0ec6cadeb11d4, type: 3}
       propertyPath: terrainMask.m_Bits
       value: 4294967295
