@@ -37,6 +37,7 @@ public class ToolManager : MonoBehaviour
         if (tilePreviewScript.isEnabled)
         {
             currentToolInstance?.Use();
+            toolPrefabs[currentToolIndex].numUses = currentToolInstance.numUses;
             if (currentToolInstance.numUses < 1)
             {
                 RemoveTool(currentToolIndex);

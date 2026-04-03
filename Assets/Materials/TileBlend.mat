@@ -72,7 +72,7 @@ Material:
     - _MeshTopY: 0.35
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _TextureTiling: 1
+    - _TextureTiling: 0.5
     m_Colors:
     - _EdgeColor: {r: 0.48627454, g: 0.6313726, b: 0.16470589, a: 1}
     - _TileColor: {r: 0.98039216, g: 0.78431374, b: 0.5411765, a: 1}
