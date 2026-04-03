@@ -37,10 +37,8 @@ public class ToolManager : MonoBehaviour
         if (tilePreviewScript.isEnabled)
         {
             currentToolInstance?.Use();
-            Debug.Log("use");
             if (currentToolInstance.numUses < 1)
             {
-                Debug.Log("removed");
                 RemoveTool(currentToolIndex);
                 EquipTool(0);
             }
@@ -59,7 +57,6 @@ public class ToolManager : MonoBehaviour
 
         if (currentToolInstance.toolType == ToolType.Hoe || currentToolInstance.toolType == ToolType.Hammer)
         {
-            Debug.Log("tool change");
             grid.SetTool(currentToolInstance.toolType);
         }
     }

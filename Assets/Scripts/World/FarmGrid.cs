@@ -5,6 +5,8 @@ using System.Linq;
 
 public class FarmGrid : MonoBehaviour
 {
+    private static readonly int TileColorID = Shader.PropertyToID("_TileColor");
+
     [Header("Grid Settings")]
     public int width = 50;
     public int height = 50;
@@ -176,12 +178,13 @@ public class FarmGrid : MonoBehaviour
                 if (tile.isWatered)
                 {
                     rend.material = Instantiate(rend.material);
-                    rend.material.color = tile.tileSet.colorWet;
+                    rend.material.SetColor(TileColorID, tile.tileSet.colorWet);
+
                 }
                 else
                 {
                     rend.material = Instantiate(rend.material);
-                    rend.material.color = tile.tileSet.color;
+                    rend.material.SetColor(TileColorID, tile.tileSet.color);
                 }
             }
         }
@@ -632,8 +635,8 @@ public class FarmGrid : MonoBehaviour
         renderer.material = Instantiate(renderer.material);
 
 
-        renderer.material.color = hoeTileSet.colorWet;
-
+        renderer.material.SetColor(TileColorID, hoeTileSet.colorWet);
+        
     }
 
     void DryTile(float deltaTime)
