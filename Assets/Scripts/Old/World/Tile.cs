@@ -5,6 +5,8 @@ public class Tile
     public bool active;
     public GameObject instance;
     public GameObject sourcePrefab;
+     public Renderer renderer;        // cached renderer (performance)
+    public Vector3 worldPosition;    // cached world position (performance)
     public TileType type = TileType.Empty;
 
     // Crop data
